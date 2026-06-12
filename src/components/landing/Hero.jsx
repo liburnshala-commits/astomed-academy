@@ -19,7 +19,7 @@ export default function Hero() {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-accent/20 border border-accent/30 mb-8">
               <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              <span className="text-xs font-body font-medium tracking-widest uppercase text-accent">Ny kurserie · Lansering 2025</span>
+              <span className="text-xs font-body font-medium tracking-widest uppercase text-accent">Ny kurserie · Lansering 2026</span>
             </div>
           </motion.div>
 
