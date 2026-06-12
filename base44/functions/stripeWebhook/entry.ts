@@ -1,0 +1,44 @@
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
+import Stripe from 'npm:stripe@14.21.0';
+
+Deno.serve(async (req) => {
+  try {
+    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY"));
+    const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
+
+    const body = await req.text();
+    const signature = req.headers.get("stripe-signature");
+
+    let event;
+    if (webhookSecret && signature) {
+      event = await stripe.webhooks.constructEventAsync(body, signature, webhookSecret);
+    } else {
+      event = JSON.parse(body);
+    }
+
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object;
+      const { module_id, buyer_name, buyer_email } = session.metadata || {};
+
+      if (module_id) {
+        const base44 = createClientFromRequest(req);
+
+        await base44.asServiceRole.entities.Purchase.create({
+          module_id,
+          buyer_email: buyer_email || session.customer_email || "",
+          buyer_name: buyer_name || "",
+          amount: session.amount_total ? session.amount_total / 100 : 0,
+          status: "completed",
+          stripe_session_id: session.id,
+        });
+
+        console.log(`Purchase created for module ${module_id}, buyer: ${buyer_email}`);
+      }
+    }
+
+    return Response.json({ received: true });
+  } catch (error) {
+    console.error("Stripe webhook error:", error);
+    return Response.json({ error: error.message }, { status: 400 });
+  }
+});

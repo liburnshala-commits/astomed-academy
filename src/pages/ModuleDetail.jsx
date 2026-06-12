@@ -1,10 +1,10 @@
-import React from "react";
-import { useParams, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Clock, FileText, Download, PlayCircle, Lock } from "lucide-react";
+import { ArrowLeft, Clock, FileText, Download, PlayCircle, Lock, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
@@ -19,6 +19,13 @@ const statusLabels = {
 
 export default function ModuleDetail() {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const [checkingOut, setCheckingOut] = useState(false);
+  const [buyerEmail, setBuyerEmail] = useState("");
+  const [buyerName, setBuyerName] = useState("");
+  const [showEmailForm, setShowEmailForm] = useState(false);
+
+  const paymentStatus = searchParams.get("payment");
 
   const { data: module, isLoading } = useQuery({
     queryKey: ["module", id],
@@ -27,6 +34,28 @@ export default function ModuleDetail() {
       return modules[0];
     },
   });
+
+  const handleCheckout = async () => {
+    // Block checkout if running in iframe (preview mode)
+    if (window.self !== window.top) {
+      alert("Betalning fungerar bara från den publicerade appen, inte i förhandsvisning.");
+      return;
+    }
+    if (!buyerEmail) {
+      setShowEmailForm(true);
+      return;
+    }
+    setCheckingOut(true);
+    const response = await base44.functions.invoke("createCheckout", {
+      module_id: id,
+      buyer_email: buyerEmail,
+      buyer_name: buyerName,
+    });
+    if (response.data?.checkout_url) {
+      window.location.href = response.data.checkout_url;
+    }
+    setCheckingOut(false);
+  };
 
   if (isLoading) {
     return (
@@ -128,21 +157,65 @@ export default function ModuleDetail() {
             </div>
           )}
 
-          {module.price && (
-            <div className="mt-8 bg-card rounded-2xl border border-accent/20 p-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          {paymentStatus === "success" && (
+            <div className="mt-8 bg-green-50 border border-green-200 rounded-2xl p-6 flex items-center gap-4">
+              <CheckCircle className="w-8 h-8 text-green-600 shrink-0" />
               <div>
-                <p className="text-sm text-muted-foreground">Pris per modul</p>
-                <p className="font-heading text-3xl font-bold text-foreground mt-1">
-                  {module.price} <span className="text-lg font-normal text-muted-foreground">kr</span>
-                </p>
+                <h3 className="font-heading font-semibold text-green-800">Köp genomfört!</h3>
+                <p className="text-sm text-green-700 mt-1">Tack för ditt köp. Du har nu tillgång till modulen.</p>
               </div>
-              <Button
-                size="lg"
-                className="bg-accent text-accent-foreground hover:bg-accent/90 px-8"
-                disabled={!isPublished}
-              >
-                {isPublished ? "Köp modul" : "Meddela mig vid lansering"}
-              </Button>
+            </div>
+          )}
+
+          {module.price && isPublished && (
+            <div className="mt-8 bg-card rounded-2xl border border-accent/20 p-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Pris per modul</p>
+                  <p className="font-heading text-3xl font-bold text-foreground mt-1">
+                    {module.price} <span className="text-lg font-normal text-muted-foreground">kr</span>
+                  </p>
+                </div>
+                {!showEmailForm && (
+                  <Button
+                    size="lg"
+                    className="bg-accent text-accent-foreground hover:bg-accent/90 px-8"
+                    onClick={handleCheckout}
+                    disabled={checkingOut}
+                  >
+                    {checkingOut ? "Laddar..." : "Köp modul"}
+                  </Button>
+                )}
+              </div>
+
+              {showEmailForm && (
+                <div className="space-y-3 border-t border-border/50 pt-4">
+                  <p className="text-sm text-muted-foreground">Fyll i dina uppgifter för att fortsätta till betalning:</p>
+                  <input
+                    type="text"
+                    placeholder="Ditt namn"
+                    value={buyerName}
+                    onChange={e => setBuyerName(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Din e-postadress *"
+                    value={buyerEmail}
+                    onChange={e => setBuyerEmail(e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
+                    required
+                  />
+                  <Button
+                    size="lg"
+                    className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
+                    onClick={handleCheckout}
+                    disabled={checkingOut || !buyerEmail}
+                  >
+                    {checkingOut ? "Laddar..." : "Fortsätt till betalning"}
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </motion.div>

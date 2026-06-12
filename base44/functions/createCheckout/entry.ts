@@ -1,0 +1,58 @@
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
+import Stripe from 'npm:stripe@14.21.0';
+
+Deno.serve(async (req) => {
+  try {
+    const { module_id, success_url, cancel_url, buyer_email, buyer_name } = await req.json();
+
+    const base44 = createClientFromRequest(req);
+    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY"));
+
+    const modules = await base44.asServiceRole.entities.Module.filter({ id: module_id });
+    const module = modules[0];
+
+    if (!module) {
+      return Response.json({ error: "Modulen hittades inte" }, { status: 404 });
+    }
+
+    if (module.status !== "published") {
+      return Response.json({ error: "Modulen är inte tillgänglig för köp" }, { status: 400 });
+    }
+
+    if (!module.price) {
+      return Response.json({ error: "Inget pris satt för denna modul" }, { status: 400 });
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment",
+      customer_email: buyer_email || undefined,
+      line_items: [
+        {
+          price_data: {
+            currency: "sek",
+            unit_amount: Math.round(module.price * 100),
+            product_data: {
+              name: `Modul ${module.module_number}: ${module.title}`,
+              description: module.description || undefined,
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        base44_app_id: Deno.env.get("BASE44_APP_ID"),
+        module_id: module_id,
+        buyer_name: buyer_name || "",
+        buyer_email: buyer_email || "",
+      },
+      success_url: success_url || `${req.headers.get("origin")}/modul/${module_id}?payment=success`,
+      cancel_url: cancel_url || `${req.headers.get("origin")}/modul/${module_id}?payment=cancelled`,
+    });
+
+    return Response.json({ checkout_url: session.url, session_id: session.id });
+  } catch (error) {
+    console.error("Stripe checkout error:", error);
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+});

@@ -26,6 +26,10 @@
         "refunded"
       ],
       "default": "pending"
+    },
+    "stripe_session_id": {
+      "type": "string",
+      "description": "Stripe checkout session ID"
     }
   },
   "required": [
