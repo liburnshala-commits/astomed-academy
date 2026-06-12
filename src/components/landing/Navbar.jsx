@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Award } from "lucide-react";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -33,6 +35,14 @@ export default function Navbar() {
           <a href="#kurser" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Kurser</a>
           <a href="#om-oss" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Om oss</a>
           <a href="#kontakt" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Kontakt</a>
+          {isAuthenticated && (
+            <Link to="/mina-certifikat">
+              <Button variant="ghost" size="sm" className="font-body font-medium text-xs gap-1.5">
+                <Award className="w-4 h-4" />
+                Mina certifikat
+              </Button>
+            </Link>
+          )}
           <Link to="/admin">
             <Button variant="outline" size="sm" className="font-body font-medium text-xs tracking-wide">Admin</Button>
           </Link>
@@ -48,6 +58,14 @@ export default function Navbar() {
           <a href="#kurser" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Kurser</a>
           <a href="#om-oss" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Om oss</a>
           <a href="#kontakt" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Kontakt</a>
+          {isAuthenticated && (
+            <Link to="/mina-certifikat" onClick={() => setOpen(false)}>
+              <Button variant="ghost" size="sm" className="w-full mt-1 font-body gap-1.5">
+                <Award className="w-4 h-4" />
+                Mina certifikat
+              </Button>
+            </Link>
+          )}
           <Link to="/admin" onClick={() => setOpen(false)}>
             <Button variant="outline" size="sm" className="w-full mt-2 font-body">Admin</Button>
           </Link>

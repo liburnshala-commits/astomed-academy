@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import ModuleDetail from './pages/ModuleDetail';
 import Admin from './pages/Admin';
 import AdminQuiz from './pages/AdminQuiz';
+import MyCertificates from './pages/MyCertificates';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
@@ -49,6 +50,7 @@ const AuthenticatedApp = () => {
       <Route path="/modul/:id" element={<ModuleDetail />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/admin/quiz" element={<AdminQuiz />} />
+      <Route path="/mina-certifikat" element={<MyCertificates />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
