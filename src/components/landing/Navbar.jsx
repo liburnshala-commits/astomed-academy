@@ -24,8 +24,8 @@ export default function Navbar() {
             className="h-8 w-auto"
           />
           <div className="flex flex-col">
-            <span className="text-xs font-body font-semibold text-foreground leading-none">ASTOMED</span>
-            <span className="text-xs font-body font-semibold text-foreground leading-none">ACADEMY</span>
+            <span className="text-sm font-body font-semibold text-foreground leading-none">ASTOMED</span>
+            <span className="text-[9px] font-body font-semibold text-foreground leading-none">ACADEMY</span>
           </div>
         </Link>
 
