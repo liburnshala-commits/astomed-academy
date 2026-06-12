@@ -109,14 +109,21 @@ export default function Admin() {
         <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
           <div className="p-6 flex items-center justify-between border-b border-border/50">
             <h2 className="font-heading text-lg font-semibold">Moduler</h2>
-            <Button
-              size="sm"
-              className="bg-primary text-primary-foreground gap-2"
-              onClick={() => { setEditModule(null); setShowForm(true); }}
-            >
-              <Plus className="w-4 h-4" />
-              Ny modul
-            </Button>
+            <div className="flex gap-2">
+              <Link to="/admin/quiz">
+                <Button size="sm" variant="outline" className="gap-2">
+                  Quiz-hantering
+                </Button>
+              </Link>
+              <Button
+                size="sm"
+                className="bg-primary text-primary-foreground gap-2"
+                onClick={() => { setEditModule(null); setShowForm(true); }}
+              >
+                <Plus className="w-4 h-4" />
+                Ny modul
+              </Button>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
