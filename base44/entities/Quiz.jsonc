@@ -1,0 +1,33 @@
+{
+  "name": "Quiz",
+  "type": "object",
+  "properties": {
+    "module_id": {
+      "type": "string",
+      "description": "Kopplad modul (Module.id)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Quizets titel, t.ex. 'Kunskapskontroll \u2013 Modul 1'"
+    },
+    "passing_score": {
+      "type": "number",
+      "default": 80,
+      "description": "Godk\u00e4nd po\u00e4ng i procent (t.ex. 80 = 80%)"
+    },
+    "max_attempts": {
+      "type": "number",
+      "default": 3,
+      "description": "Max antal f\u00f6rs\u00f6k per anv\u00e4ndare"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Om quizet \u00e4r aktiverat och synligt"
+    }
+  },
+  "required": [
+    "module_id",
+    "title"
+  ]
+}

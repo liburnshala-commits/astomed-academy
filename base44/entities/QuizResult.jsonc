@@ -1,0 +1,64 @@
+{
+  "name": "QuizResult",
+  "type": "object",
+  "properties": {
+    "quiz_id": {
+      "type": "string",
+      "description": "Kopplat quiz (Quiz.id)"
+    },
+    "module_id": {
+      "type": "string",
+      "description": "Kopplad modul (Module.id) \u2013 denormaliserat f\u00f6r snabb s\u00f6kning"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Anv\u00e4ndaren som genomf\u00f6rde quizet (User.id)"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "Anv\u00e4ndarens fullst\u00e4ndiga namn vid tillf\u00e4llet \u2013 sparas f\u00f6r certifikat"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Anv\u00e4ndarens e-post vid tillf\u00e4llet \u2013 sparas f\u00f6r certifikat"
+    },
+    "score": {
+      "type": "number",
+      "description": "Uppn\u00e5dd po\u00e4ng i procent (0\u2013100)"
+    },
+    "correct_answers": {
+      "type": "number",
+      "description": "Antal r\u00e4tt svar"
+    },
+    "total_questions": {
+      "type": "number",
+      "description": "Totalt antal fr\u00e5gor i quizet"
+    },
+    "passed": {
+      "type": "boolean",
+      "default": false,
+      "description": "true om score >= Quiz.passing_score"
+    },
+    "attempt_number": {
+      "type": "number",
+      "default": 1,
+      "description": "Vilket f\u00f6rs\u00f6ksnummer detta \u00e4r f\u00f6r anv\u00e4ndaren"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Tidpunkt f\u00f6r genomf\u00f6randet"
+    },
+    "certificate_url": {
+      "type": "string",
+      "description": "URL till genererat certifikat (s\u00e4tts n\u00e4r passed=true och certifikat skapats)"
+    }
+  },
+  "required": [
+    "quiz_id",
+    "module_id",
+    "user_id",
+    "score",
+    "passed"
+  ]
+}

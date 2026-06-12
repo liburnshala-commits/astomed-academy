@@ -1,0 +1,39 @@
+{
+  "name": "QuizQuestion",
+  "type": "object",
+  "properties": {
+    "quiz_id": {
+      "type": "string",
+      "description": "Kopplat quiz (Quiz.id)"
+    },
+    "question_text": {
+      "type": "string",
+      "description": "Fr\u00e5gans text"
+    },
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Svarsalternativ, t.ex. ['Alternativ A', 'Alternativ B', 'Alternativ C', 'Alternativ D']"
+    },
+    "correct_option_index": {
+      "type": "number",
+      "description": "Index f\u00f6r r\u00e4tt svar i options-arrayen (0-baserat)"
+    },
+    "explanation": {
+      "type": "string",
+      "description": "F\u00f6rklaring som visas efter svar \u2013 pedagogisk \u00e5terkoppling"
+    },
+    "order": {
+      "type": "number",
+      "description": "Visningsordning inom quizet"
+    }
+  },
+  "required": [
+    "quiz_id",
+    "question_text",
+    "options",
+    "correct_option_index"
+  ]
+}
