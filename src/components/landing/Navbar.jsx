@@ -23,7 +23,7 @@ export default function Navbar() {
             alt="Astomed Academy"
             className="h-8 w-auto"
           />
-          <div className="flex flex-col">
+          <div className="flex flex-col items-end">
             <span className="text-sm font-body font-semibold text-foreground leading-none">ASTOMED</span>
             <span className="text-[9px] font-body font-semibold text-foreground leading-none">ACADEMY</span>
           </div>
