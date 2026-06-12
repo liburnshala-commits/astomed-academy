@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,7 @@ import {
 import { motion } from "framer-motion";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
+import QuizPlayer from "@/components/quiz/QuizPlayer";
 
 const statusLabels = {
   draft: "Under utveckling",
@@ -26,6 +27,7 @@ export default function ModuleDetail() {
   const [searchParams] = useSearchParams();
   const { user, isAuthenticated, navigateToLogin } = useAuth();
   const [checkingOut, setCheckingOut] = useState(false);
+  const queryClient = useQueryClient();
 
   const paymentStatus = searchParams.get("payment");
 
@@ -192,6 +194,12 @@ export default function ModuleDetail() {
               {/* Purchased, not yet completed */}
               {hasPurchased && !isCompletedAndLocked && (
                 <div className="mt-8 space-y-4">
+                  <QuizPlayer
+                    moduleId={id}
+                    onCertificateReady={() => {
+                      queryClient.invalidateQueries({ queryKey: ["certificate", id, user?.id] });
+                    }}
+                  />
                   {module.video_url ? (
                     <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
                       <div className="aspect-video">
