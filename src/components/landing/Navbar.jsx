@@ -19,7 +19,7 @@ export default function Navbar() {
         {/* Logo matching Astomed style */}
         <Link to="/" className="flex items-center">
           <img
-            src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/c0131e5cb_image.png"
+            src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/e4179d601_2f5b9caa-454e-4c2c-b6d4-ffd1f033caa6.png"
             alt="Astomed Academy"
             className="h-8 w-auto"
           />
