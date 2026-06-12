@@ -1,19 +1,19 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Scale, Video, Briefcase, Users } from "lucide-react";
+import { Scale, Briefcase, Users, Building2 } from "lucide-react";
 
 const partners = [
   {
-    name: "Medlaw",
-    role: "Innehåll & Expertis",
-    description: "Juridisk expertis, manusstruktur och extramaterial. Det tunga lagliga innehållet i tillgänglig form.",
+    name: "Medlaw Sweden",
+    role: "Juridisk expertis & utbildningsinnehåll",
+    description: "Medlaw är ett konsult- och utbildningsbolag inom medicinsk rätt som hjälper vårdens aktörer med juridiken för ökad patientsäkerhet och effektivitet. De erbjuder skräddarsydda kurser, seminarier och workshops inom medicinsk rätt samt juridisk rådgivning till chefer och personal inom vård- och omsorgssektorn. I Astomed Academy ansvarar Medlaw för det juridiska innehållet – tung expertkunskap paketerad i tillgängligt klarspråk.",
     icon: Scale,
   },
   {
     name: "Astomed",
-    role: "Plattform & Produktion",
-    description: "Teknik, filmstudio, paketering, marknadsföring och försäljning. Allt det praktiska.",
-    icon: Video,
+    role: "Branschkunskap & klinisk förankring",
+    description: "Astomed är Nordens ledande leverantör av klinikutrustning och produkter till skönhetskliniker sedan 2005, och en del av Asker Healthcare Group. Med över 5 000 kunder och djup kännedom om klinikernas vardag och utmaningar bidrar Astomed med branschperspektiv, klinisk relevans och ett brett nätverk av yrkesverksamma kliniker. Det är Astomeds förståelse för vad klinikerna faktiskt behöver som formar kursmaterialets praktiska tillämpning.",
+    icon: Briefcase,
   },
 ];
 
@@ -33,8 +33,7 @@ export default function AboutSection() {
             Astomed × Medlaw
           </h2>
           <p className="mt-4 font-body text-muted-foreground leading-relaxed">
-            Tung juridik i korta, lättsamma och klarspråkiga moduler. Vi sänker tröskeln för kliniker 
-            att göra rätt från början.
+            Astomed Academy är resultatet av ett samarbete mellan två starka aktörer: Medlaws spetskompetens inom medicinsk rätt och Astomeds djupa kännedom om klinikernas vardag. Tillsammans sätter vi juridiken i praktiskt sammanhang – konkret, tillgängligt och direkt tillämpbart för dig som jobbar i vården.
           </p>
         </motion.div>
 
@@ -68,8 +67,8 @@ export default function AboutSection() {
           {[
             { icon: Briefcase, value: "15 min", label: "Per modul" },
             { icon: Scale, value: "5", label: "Pilotmoduler" },
-            { icon: Users, value: "2", label: "Expertpartners" },
-            { icon: Video, value: "2025", label: "Lansering" },
+            { icon: Users, value: "+5 000", label: "Kliniker i norden" },
+            { icon: Building2, value: "19 år", label: "Branscherfarenhet" },
           ].map((stat) => (
             <div key={stat.label} className="text-center p-6 bg-card border border-border/50" style={{borderRadius: "4px"}}>
               <stat.icon className="w-4.5 h-4.5 text-accent mx-auto mb-3" />
