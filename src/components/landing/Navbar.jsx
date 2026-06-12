@@ -17,7 +17,7 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-border/40">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo matching Astomed style */}
-        <Link to="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-end gap-2">
           <img
             src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/e4179d601_2f5b9caa-454e-4c2c-b6d4-ffd1f033caa6.png"
             alt="Astomed Academy"
