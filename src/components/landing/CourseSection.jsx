@@ -22,11 +22,11 @@ export default function CourseSection() {
           transition={{ duration: 0.6 }}
           className="max-w-2xl"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent mb-3">Pilotkurs</p>
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground leading-tight">
+          <p className="text-xs font-body font-semibold uppercase tracking-widest text-accent mb-3">Pilotkurs</p>
+          <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground leading-tight">
             Legitimation och yrkesansvar
           </h2>
-          <p className="mt-4 text-muted-foreground leading-relaxed">
+          <p className="mt-4 font-body text-muted-foreground leading-relaxed">
             Rättigheter, skyldigheter och risker. Fem fokuserade moduler som ger dig det juridiska grundskyddet 
             för din kliniska verksamhet.
           </p>

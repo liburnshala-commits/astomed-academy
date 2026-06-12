@@ -62,9 +62,9 @@ module.exports = {
   			}
   		},
 		fontFamily: {
-			heading: ['var(--font-heading)'],
-			body: ['var(--font-body)'],
-			display: ['var(--font-display)'],
+			heading: ['Poppins', 'Arial', 'sans-serif'],
+			body: ['Lato', 'Arial', 'sans-serif'],
+			display: ['Poppins', 'Arial', 'sans-serif'],
 			mono: ['var(--font-mono)']
 		},
   		keyframes: {

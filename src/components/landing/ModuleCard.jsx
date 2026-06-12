@@ -13,64 +13,58 @@ export default function ModuleCard({ module, index }) {
     published: "Tillgänglig",
   };
 
-  const statusStyles = {
-    draft: "bg-muted text-muted-foreground",
-    script_ready: "bg-accent/10 text-accent-foreground",
-    recorded: "bg-accent/20 text-accent-foreground",
-    editing: "bg-accent/30 text-accent-foreground",
-    published: "bg-accent text-accent-foreground",
-  };
+  const isAvailable = module.status === "published";
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
     >
       <Link to={`/modul/${module.id}`} className="group block">
-        <div className="relative bg-card rounded-2xl border border-border/50 p-6 md:p-8 hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5 transition-all duration-300">
+        <div className="relative bg-card border border-border/50 p-6 md:p-8 hover:border-accent/40 hover:shadow-md transition-all duration-200" style={{borderRadius: "4px"}}>
           {/* Module number */}
-          <div className="absolute top-6 right-6 md:top-8 md:right-8">
-            <span className="font-heading text-5xl md:text-6xl font-bold text-muted/80 select-none">
+          <div className="absolute top-6 right-8 md:top-8">
+            <span className="font-heading text-5xl font-bold text-muted/60 select-none tabular-nums">
               {String(module.module_number).padStart(2, "0")}
             </span>
           </div>
 
           <div className="relative">
-            <Badge className={`${statusStyles[module.status] || statusStyles.draft} border-0 text-[10px] uppercase tracking-wider font-semibold`}>
+            <span className={`inline-block text-[10px] font-body font-semibold uppercase tracking-widest px-2.5 py-1 rounded-sm ${isAvailable ? "bg-accent text-white" : "bg-muted text-muted-foreground"}`}>
               {statusLabels[module.status] || "Under utveckling"}
-            </Badge>
+            </span>
 
-            <h3 className="mt-4 font-heading text-xl md:text-2xl font-semibold text-foreground leading-snug pr-16 group-hover:text-accent transition-colors">
+            <h3 className="mt-4 font-heading text-lg md:text-xl font-semibold text-foreground leading-snug pr-16 group-hover:text-accent transition-colors duration-200">
               {module.title}
             </h3>
 
-            <p className="mt-3 text-sm text-muted-foreground leading-relaxed line-clamp-2">
+            <p className="mt-2 text-sm font-body text-muted-foreground leading-relaxed line-clamp-2">
               {module.description}
             </p>
 
             <div className="mt-6 flex items-center justify-between">
-              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="flex items-center gap-5 text-xs font-body text-muted-foreground">
                 <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" />
+                  <Clock className="w-3.5 h-3.5 text-accent/70" />
                   {module.duration_minutes || 15} min
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <FileText className="w-3.5 h-3.5" />
+                  <FileText className="w-3.5 h-3.5 text-accent/70" />
                   PDF inkl.
                 </span>
               </div>
 
               {module.price && (
-                <span className="text-lg font-semibold text-foreground">
-                  {module.price} <span className="text-sm font-normal text-muted-foreground">kr</span>
+                <span className="font-heading text-lg font-semibold text-foreground">
+                  {module.price} <span className="text-sm font-body font-normal text-muted-foreground">kr</span>
                 </span>
               )}
             </div>
 
-            <div className="mt-4 flex items-center gap-1.5 text-sm font-medium text-accent opacity-0 group-hover:opacity-100 transition-opacity">
-              Läs mer <ArrowRight className="w-3.5 h-3.5" />
+            <div className="mt-4 flex items-center gap-1.5 text-xs font-body font-semibold uppercase tracking-wider text-accent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              Läs mer <ArrowRight className="w-3 h-3" />
             </div>
           </div>
         </div>
