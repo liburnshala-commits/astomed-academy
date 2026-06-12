@@ -1,0 +1,35 @@
+{
+  "name": "Purchase",
+  "type": "object",
+  "properties": {
+    "module_id": {
+      "type": "string",
+      "description": "Purchased module ID"
+    },
+    "buyer_email": {
+      "type": "string",
+      "description": "Buyer email"
+    },
+    "buyer_name": {
+      "type": "string",
+      "description": "Buyer name"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Amount paid in SEK"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "refunded"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "module_id",
+    "buyer_email"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "name": "Module",
+  "type": "object",
+  "properties": {
+    "course_id": {
+      "type": "string",
+      "description": "ID of the parent course"
+    },
+    "title": {
+      "type": "string",
+      "description": "Module title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Module description"
+    },
+    "content_summary": {
+      "type": "string",
+      "description": "Detailed content summary"
+    },
+    "module_number": {
+      "type": "number",
+      "description": "Order number within the course"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "default": 15,
+      "description": "Duration in minutes"
+    },
+    "price": {
+      "type": "number",
+      "description": "Individual module price in SEK"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "Video URL when published"
+    },
+    "pdf_url": {
+      "type": "string",
+      "description": "Downloadable PDF resource URL"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "script_ready",
+        "recorded",
+        "editing",
+        "published"
+      ],
+      "default": "draft",
+      "description": "Production status"
+    },
+    "script_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "done"
+      ],
+      "default": "not_started",
+      "description": "Script writing status (Medlaw)"
+    },
+    "recording_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "scheduled",
+        "done"
+      ],
+      "default": "not_started",
+      "description": "Recording status (Astomed)"
+    },
+    "pdf_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "done"
+      ],
+      "default": "not_started",
+      "description": "PDF resource status"
+    }
+  },
+  "required": [
+    "title",
+    "module_number"
+  ]
+}

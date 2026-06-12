@@ -1,0 +1,39 @@
+{
+  "name": "Course",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Course title"
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Short subtitle or tagline"
+    },
+    "description": {
+      "type": "string",
+      "description": "Full course description"
+    },
+    "price": {
+      "type": "number",
+      "description": "Price in SEK"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Cover image URL"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_production",
+        "published"
+      ],
+      "default": "draft",
+      "description": "Publication status"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}
