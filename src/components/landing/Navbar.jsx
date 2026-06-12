@@ -17,10 +17,12 @@ export default function Navbar() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-border/40" : "bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo matching Astomed style */}
-        <Link to="/" className="flex items-center gap-1">
-          <span className="font-heading text-xl font-semibold tracking-tight text-foreground">Astomed</span>
-          <sup className="text-[10px] font-body text-muted-foreground mt-1">™</sup>
-          <span className="ml-2 text-xs font-body font-medium uppercase tracking-[0.18em] text-accent border-l border-border/60 pl-2">Academy</span>
+        <Link to="/" className="flex items-center">
+          <img
+            src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/c0131e5cb_image.png"
+            alt="Astomed Academy"
+            className="h-8 w-auto"
+          />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
