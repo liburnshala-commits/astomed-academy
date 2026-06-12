@@ -6,6 +6,10 @@
       "type": "string",
       "description": "Purchased module ID"
     },
+    "user_id": {
+      "type": "string",
+      "description": "Base44 user ID (if logged in at time of purchase)"
+    },
     "buyer_email": {
       "type": "string",
       "description": "Buyer email"

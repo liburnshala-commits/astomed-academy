@@ -3,10 +3,16 @@ import Stripe from 'npm:stripe@14.21.0';
 
 Deno.serve(async (req) => {
   try {
-    const { module_id, success_url, cancel_url, buyer_email, buyer_name } = await req.json();
+    const { module_id, success_url, cancel_url } = await req.json();
 
     const base44 = createClientFromRequest(req);
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY"));
+
+    // Require authenticated user
+    const user = await base44.auth.me();
+    if (!user) {
+      return Response.json({ error: "Du måste vara inloggad för att köpa en modul." }, { status: 401 });
+    }
 
     const modules = await base44.asServiceRole.entities.Module.filter({ id: module_id });
     const module = modules[0];
@@ -26,7 +32,7 @@ Deno.serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
-      customer_email: buyer_email || undefined,
+      customer_email: user.email || undefined,
       line_items: [
         {
           price_data: {
@@ -43,11 +49,12 @@ Deno.serve(async (req) => {
       metadata: {
         base44_app_id: Deno.env.get("BASE44_APP_ID"),
         module_id: module_id,
-        buyer_name: buyer_name || "",
-        buyer_email: buyer_email || "",
+        user_id: user.id,
+        buyer_email: user.email || "",
+        buyer_name: user.full_name || "",
       },
       success_url: success_url || `${req.headers.get("origin")}/modul/${module_id}?payment=success`,
-      cancel_url: cancel_url || `${req.headers.get("origin")}/modul/${module_id}?payment=cancelled`,
+      cancel_url: cancel_url || `${req.headers.get("origin")}/modul/${module_id}`,
     });
 
     return Response.json({ checkout_url: session.url, session_id: session.id });

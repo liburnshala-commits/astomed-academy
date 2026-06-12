@@ -18,13 +18,14 @@ Deno.serve(async (req) => {
 
     if (event.type === "checkout.session.completed") {
       const session = event.data.object;
-      const { module_id, buyer_name, buyer_email } = session.metadata || {};
+      const { module_id, user_id, buyer_name, buyer_email } = session.metadata || {};
 
       if (module_id) {
         const base44 = createClientFromRequest(req);
 
         await base44.asServiceRole.entities.Purchase.create({
           module_id,
+          user_id: user_id || "",
           buyer_email: buyer_email || session.customer_email || "",
           buyer_name: buyer_name || "",
           amount: session.amount_total ? session.amount_total / 100 : 0,
@@ -32,7 +33,7 @@ Deno.serve(async (req) => {
           stripe_session_id: session.id,
         });
 
-        console.log(`Purchase created for module ${module_id}, buyer: ${buyer_email}`);
+        console.log(`Purchase created: module=${module_id}, user=${user_id}, email=${buyer_email}`);
       }
     }
 

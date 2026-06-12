@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Clock, FileText, Download, PlayCircle, Lock, CheckCircle } from "lucide-react";
+import {
+  ArrowLeft, Clock, FileText, Download, PlayCircle,
+  Lock, CheckCircle, ShoppingCart, LogIn, Award
+} from "lucide-react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
@@ -20,14 +24,12 @@ const statusLabels = {
 export default function ModuleDetail() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
+  const { user, isAuthenticated, navigateToLogin } = useAuth();
   const [checkingOut, setCheckingOut] = useState(false);
-  const [buyerEmail, setBuyerEmail] = useState("");
-  const [buyerName, setBuyerName] = useState("");
-  const [showEmailForm, setShowEmailForm] = useState(false);
 
   const paymentStatus = searchParams.get("payment");
 
-  const { data: module, isLoading } = useQuery({
+  const { data: module, isLoading: moduleLoading } = useQuery({
     queryKey: ["module", id],
     queryFn: async () => {
       const modules = await base44.entities.Module.filter({ id });
@@ -35,27 +37,52 @@ export default function ModuleDetail() {
     },
   });
 
+  const { data: purchase, isLoading: purchaseLoading } = useQuery({
+    queryKey: ["purchase", id, user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const purchases = await base44.entities.Purchase.filter({
+        module_id: id,
+        user_id: user.id,
+        status: "completed",
+      });
+      return purchases[0] || null;
+    },
+  });
+
+  const { data: certificate, isLoading: certLoading } = useQuery({
+    queryKey: ["certificate", id, user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const results = await base44.entities.QuizResult.filter({
+        module_id: id,
+        user_id: user.id,
+        passed: true,
+      });
+      return results[0] || null;
+    },
+  });
+
   const handleCheckout = async () => {
-    // Block checkout if running in iframe (preview mode)
     if (window.self !== window.top) {
       alert("Betalning fungerar bara från den publicerade appen, inte i förhandsvisning.");
       return;
     }
-    if (!buyerEmail) {
-      setShowEmailForm(true);
+    if (!isAuthenticated) {
+      navigateToLogin();
       return;
     }
     setCheckingOut(true);
     const response = await base44.functions.invoke("createCheckout", {
       module_id: id,
-      buyer_email: buyerEmail,
-      buyer_name: buyerName,
     });
     if (response.data?.checkout_url) {
       window.location.href = response.data.checkout_url;
     }
     setCheckingOut(false);
   };
+
+  const isLoading = moduleLoading || (isAuthenticated && (purchaseLoading || certLoading));
 
   if (isLoading) {
     return (
@@ -81,6 +108,8 @@ export default function ModuleDetail() {
   }
 
   const isPublished = module.status === "published";
+  const hasPurchased = !!purchase;
+  const isCompletedAndLocked = hasPurchased && !!certificate;
 
   return (
     <div className="min-h-screen bg-background">
@@ -129,25 +158,116 @@ export default function ModuleDetail() {
             )}
           </div>
 
-          {isPublished ? (
-            <div className="mt-8 space-y-4">
-              {module.video_url && (
-                <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
-                  <div className="aspect-video bg-muted flex items-center justify-center">
-                    <PlayCircle className="w-16 h-16 text-muted-foreground/50" />
+          {paymentStatus === "success" && (
+            <div className="mt-8 bg-green-50 border border-green-200 rounded-2xl p-6 flex items-center gap-4">
+              <CheckCircle className="w-8 h-8 text-green-600 shrink-0" />
+              <div>
+                <h3 className="font-heading font-semibold text-green-800">Köp genomfört!</h3>
+                <p className="text-sm text-green-700 mt-1">Tack för ditt köp. Du har nu tillgång till modulen nedan.</p>
+              </div>
+            </div>
+          )}
+
+          {isPublished && (
+            <>
+              {/* Completed & locked */}
+              {isCompletedAndLocked && (
+                <div className="mt-8 bg-amber-50 border border-amber-200 rounded-2xl p-8 text-center">
+                  <Award className="w-10 h-10 text-amber-500 mx-auto mb-3" />
+                  <h3 className="font-heading text-lg font-semibold text-amber-900">Utbildning avklarad</h3>
+                  <p className="text-sm text-amber-700 mt-2 max-w-md mx-auto">
+                    Du har godkänts och erhållit ett certifikat för denna modul. Kursinnehållet är nu låst.
+                  </p>
+                  {certificate.certificate_url && (
+                    <a href={certificate.certificate_url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block">
+                      <Button variant="outline" className="gap-2 border-amber-300 text-amber-800 hover:bg-amber-100">
+                        <Download className="w-4 h-4" />
+                        Ladda ner certifikat
+                      </Button>
+                    </a>
+                  )}
+                </div>
+              )}
+
+              {/* Purchased, not yet completed */}
+              {hasPurchased && !isCompletedAndLocked && (
+                <div className="mt-8 space-y-4">
+                  {module.video_url ? (
+                    <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
+                      <div className="aspect-video">
+                        <iframe
+                          src={module.video_url}
+                          className="w-full h-full"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                          title={module.title}
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
+                      <div className="aspect-video bg-muted flex flex-col items-center justify-center gap-3">
+                        <PlayCircle className="w-16 h-16 text-muted-foreground/30" />
+                        <span className="text-muted-foreground text-sm">Video publiceras snart</span>
+                      </div>
+                    </div>
+                  )}
+                  {module.pdf_url && (
+                    <a href={module.pdf_url} target="_blank" rel="noopener noreferrer">
+                      <Button variant="outline" className="gap-2">
+                        <Download className="w-4 h-4" />
+                        Ladda ner PDF-resurs
+                      </Button>
+                    </a>
+                  )}
+                </div>
+              )}
+
+              {/* Not purchased */}
+              {!hasPurchased && module.price && (
+                <div className="mt-8 bg-card rounded-2xl border border-accent/20 p-8">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Pris per modul</p>
+                      <p className="font-heading text-3xl font-bold text-foreground mt-1">
+                        {module.price} <span className="text-lg font-normal text-muted-foreground">kr</span>
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-2">Inkl. video, PDF-resurs och certifikat</p>
+                    </div>
+                    <div className="flex flex-col gap-3 w-full sm:w-auto">
+                      {isAuthenticated ? (
+                        <Button
+                          size="lg"
+                          className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 gap-2"
+                          onClick={handleCheckout}
+                          disabled={checkingOut}
+                        >
+                          <ShoppingCart className="w-4 h-4" />
+                          {checkingOut ? "Laddar..." : "Köp modul"}
+                        </Button>
+                      ) : (
+                        <>
+                          <Button
+                            size="lg"
+                            className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 gap-2"
+                            onClick={() => navigateToLogin()}
+                          >
+                            <LogIn className="w-4 h-4" />
+                            Logga in för att köpa
+                          </Button>
+                          <p className="text-xs text-center text-muted-foreground">
+                            Du behöver ett konto för att komma åt kursinnehållet
+                          </p>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
-              {module.pdf_url && (
-                <a href={module.pdf_url} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="gap-2">
-                    <Download className="w-4 h-4" />
-                    Ladda ner PDF-resurs
-                  </Button>
-                </a>
-              )}
-            </div>
-          ) : (
+            </>
+          )}
+
+          {!isPublished && (
             <div className="mt-8 bg-muted/50 rounded-2xl border border-border/50 p-8 text-center">
               <Lock className="w-8 h-8 text-muted-foreground/50 mx-auto mb-3" />
               <h3 className="font-heading text-lg font-semibold text-foreground">Kommer snart</h3>
@@ -157,67 +277,6 @@ export default function ModuleDetail() {
             </div>
           )}
 
-          {paymentStatus === "success" && (
-            <div className="mt-8 bg-green-50 border border-green-200 rounded-2xl p-6 flex items-center gap-4">
-              <CheckCircle className="w-8 h-8 text-green-600 shrink-0" />
-              <div>
-                <h3 className="font-heading font-semibold text-green-800">Köp genomfört!</h3>
-                <p className="text-sm text-green-700 mt-1">Tack för ditt köp. Du har nu tillgång till modulen.</p>
-              </div>
-            </div>
-          )}
-
-          {module.price && isPublished && (
-            <div className="mt-8 bg-card rounded-2xl border border-accent/20 p-8">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Pris per modul</p>
-                  <p className="font-heading text-3xl font-bold text-foreground mt-1">
-                    {module.price} <span className="text-lg font-normal text-muted-foreground">kr</span>
-                  </p>
-                </div>
-                {!showEmailForm && (
-                  <Button
-                    size="lg"
-                    className="bg-accent text-accent-foreground hover:bg-accent/90 px-8"
-                    onClick={handleCheckout}
-                    disabled={checkingOut}
-                  >
-                    {checkingOut ? "Laddar..." : "Köp modul"}
-                  </Button>
-                )}
-              </div>
-
-              {showEmailForm && (
-                <div className="space-y-3 border-t border-border/50 pt-4">
-                  <p className="text-sm text-muted-foreground">Fyll i dina uppgifter för att fortsätta till betalning:</p>
-                  <input
-                    type="text"
-                    placeholder="Ditt namn"
-                    value={buyerName}
-                    onChange={e => setBuyerName(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Din e-postadress *"
-                    value={buyerEmail}
-                    onChange={e => setBuyerEmail(e.target.value)}
-                    className="w-full px-3 py-2 text-sm border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring"
-                    required
-                  />
-                  <Button
-                    size="lg"
-                    className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
-                    onClick={handleCheckout}
-                    disabled={checkingOut || !buyerEmail}
-                  >
-                    {checkingOut ? "Laddar..." : "Fortsätt till betalning"}
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
         </motion.div>
       </div>
       <Footer />
