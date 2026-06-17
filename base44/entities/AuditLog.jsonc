@@ -1,0 +1,56 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "audit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r revisionen"
+    },
+    "conducted_by": {
+      "type": "string",
+      "description": "Vem genomf\u00f6rde revisionen"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Vad granskades (t.ex. 'Hela verksamheten', 'Laserdokumentation')"
+    },
+    "findings": {
+      "type": "string",
+      "description": "Vad hittades / observationer"
+    },
+    "action_required": {
+      "type": "boolean",
+      "default": false,
+      "description": "Kr\u00e4vs \u00e5tg\u00e4rd?"
+    },
+    "action_description": {
+      "type": "string",
+      "description": "Beskrivning av kr\u00e4ver \u00e5tg\u00e4rd"
+    },
+    "action_deadline": {
+      "type": "string",
+      "format": "date",
+      "description": "Deadline f\u00f6r \u00e5tg\u00e4rd"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "completed"
+      ],
+      "default": "open",
+      "description": "Status"
+    },
+    "next_audit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r n\u00e4sta revision"
+    }
+  },
+  "required": [
+    "audit_date",
+    "conducted_by",
+    "scope"
+  ]
+}

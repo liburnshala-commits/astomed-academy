@@ -11,6 +11,7 @@ import ServiceLogTab from "@/components/compliance/ServiceLogTab";
 import StaffCertTab from "@/components/compliance/StaffCertTab";
 import DocumentTab from "@/components/compliance/DocumentTab";
 import IncidentTab from "@/components/compliance/IncidentTab";
+import AuditTab from "@/components/compliance/AuditTab";
 
 export default function ComplianceDashboard() {
   const { data: equipment = [] } = useQuery({
@@ -36,6 +37,11 @@ export default function ComplianceDashboard() {
   const { data: incidents = [] } = useQuery({
     queryKey: ["incidents"],
     queryFn: () => base44.entities.Incident.list("-incident_date"),
+  });
+
+  const { data: audits = [] } = useQuery({
+    queryKey: ["audits"],
+    queryFn: () => base44.entities.AuditLog.list("-audit_date"),
   });
 
   const openIncidents = incidents.filter((i) => i.status !== "closed").length;
@@ -80,6 +86,7 @@ export default function ComplianceDashboard() {
             <TabsTrigger value="service">Servicelogg ({serviceLogs.length})</TabsTrigger>
             <TabsTrigger value="staff">Personal ({certifications.length})</TabsTrigger>
             <TabsTrigger value="documents">Dokument ({documents.length})</TabsTrigger>
+            <TabsTrigger value="audit">Revision ({audits.length})</TabsTrigger>
             <TabsTrigger value="incidents" className="relative">
               Avvikelser ({incidents.length})
               {openIncidents > 0 && (
@@ -104,6 +111,9 @@ export default function ComplianceDashboard() {
           </TabsContent>
           <TabsContent value="incidents">
             <IncidentTab incidents={incidents} equipment={equipment} />
+          </TabsContent>
+          <TabsContent value="audit">
+            <AuditTab audits={audits} />
           </TabsContent>
         </Tabs>
       </div>
