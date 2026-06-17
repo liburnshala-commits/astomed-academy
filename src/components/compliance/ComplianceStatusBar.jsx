@@ -7,7 +7,7 @@ function getDaysUntil(dateStr) {
   return differenceInDays(parseISO(dateStr), new Date());
 }
 
-export default function ComplianceStatusBar({ equipment, serviceLogs, certifications }) {
+export default function ComplianceStatusBar({ equipment, serviceLogs, certifications, documents = [], incidents = [] }) {
   const today = new Date();
 
   // Equipment expiring service within 30 days or overdue
@@ -22,7 +22,16 @@ export default function ComplianceStatusBar({ equipment, serviceLogs, certificat
     return getDaysUntil(c.expiry_date) <= 60;
   });
 
-  const totalWarnings = serviceWarnings.length + certWarnings.length;
+  // Documents expiring within 30 days or expired
+  const docWarnings = documents.filter((d) => {
+    if (!d.valid_until) return false;
+    return getDaysUntil(d.valid_until) <= 30;
+  });
+
+  // Open incidents
+  const openIncidents = incidents.filter((i) => i.status !== "closed");
+
+  const totalWarnings = serviceWarnings.length + certWarnings.length + docWarnings.length + openIncidents.length;
   const overallStatus = totalWarnings === 0 ? "green" : totalWarnings <= 2 ? "yellow" : "red";
 
   const statusConfig = {

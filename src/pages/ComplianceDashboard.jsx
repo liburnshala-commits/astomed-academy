@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { ArrowLeft, GraduationCap, Plus } from "lucide-react";
+import { ArrowLeft, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ComplianceStatusBar from "@/components/compliance/ComplianceStatusBar";
 import EquipmentTab from "@/components/compliance/EquipmentTab";
 import ServiceLogTab from "@/components/compliance/ServiceLogTab";
 import StaffCertTab from "@/components/compliance/StaffCertTab";
+import DocumentTab from "@/components/compliance/DocumentTab";
+import IncidentTab from "@/components/compliance/IncidentTab";
 
 export default function ComplianceDashboard() {
   const { data: equipment = [] } = useQuery({
@@ -25,6 +27,18 @@ export default function ComplianceDashboard() {
     queryKey: ["certifications"],
     queryFn: () => base44.entities.StaffCertification.list(),
   });
+
+  const { data: documents = [] } = useQuery({
+    queryKey: ["complianceDocs"],
+    queryFn: () => base44.entities.ComplianceDocument.list(),
+  });
+
+  const { data: incidents = [] } = useQuery({
+    queryKey: ["incidents"],
+    queryFn: () => base44.entities.Incident.list("-incident_date"),
+  });
+
+  const openIncidents = incidents.filter((i) => i.status !== "closed").length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,26 +69,41 @@ export default function ComplianceDashboard() {
           equipment={equipment}
           serviceLogs={serviceLogs}
           certifications={certifications}
+          documents={documents}
+          incidents={incidents}
         />
 
         {/* Tabs */}
         <Tabs defaultValue="equipment">
-          <TabsList className="mb-6">
+          <TabsList className="mb-6 flex-wrap h-auto gap-1">
             <TabsTrigger value="equipment">Utrustning ({equipment.length})</TabsTrigger>
             <TabsTrigger value="service">Servicelogg ({serviceLogs.length})</TabsTrigger>
-            <TabsTrigger value="staff">Personal & behörigheter ({certifications.length})</TabsTrigger>
+            <TabsTrigger value="staff">Personal ({certifications.length})</TabsTrigger>
+            <TabsTrigger value="documents">Dokument ({documents.length})</TabsTrigger>
+            <TabsTrigger value="incidents" className="relative">
+              Avvikelser ({incidents.length})
+              {openIncidents > 0 && (
+                <span className="ml-1.5 inline-flex items-center justify-center w-4 h-4 text-[9px] font-bold rounded-full bg-red-500 text-white">
+                  {openIncidents}
+                </span>
+              )}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="equipment">
             <EquipmentTab equipment={equipment} />
           </TabsContent>
-
           <TabsContent value="service">
             <ServiceLogTab serviceLogs={serviceLogs} equipment={equipment} />
           </TabsContent>
-
           <TabsContent value="staff">
             <StaffCertTab certifications={certifications} equipment={equipment} />
+          </TabsContent>
+          <TabsContent value="documents">
+            <DocumentTab documents={documents} />
+          </TabsContent>
+          <TabsContent value="incidents">
+            <IncidentTab incidents={incidents} equipment={equipment} />
           </TabsContent>
         </Tabs>
       </div>

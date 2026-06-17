@@ -1,0 +1,68 @@
+{
+  "name": "Incident",
+  "type": "object",
+  "properties": {
+    "incident_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r h\u00e4ndelsen"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "patient_injury",
+        "near_miss",
+        "equipment_fault",
+        "complaint"
+      ],
+      "description": "Typ av h\u00e4ndelse"
+    },
+    "description": {
+      "type": "string",
+      "description": "Beskrivning av h\u00e4ndelsen"
+    },
+    "equipment_id": {
+      "type": "string",
+      "description": "Kopplad utrustning (Equipment.id) om relevant"
+    },
+    "equipment_name": {
+      "type": "string",
+      "description": "Utrustningens namn \u2013 denormaliserat"
+    },
+    "reported_to": {
+      "type": "string",
+      "enum": [
+        "ssm",
+        "ivo",
+        "both",
+        "internal"
+      ],
+      "default": "internal",
+      "description": "Rapporterad till"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "under_investigation",
+        "closed"
+      ],
+      "default": "open",
+      "description": "Status"
+    },
+    "corrective_action": {
+      "type": "string",
+      "description": "Vidtagen/planerad \u00e5tg\u00e4rd"
+    },
+    "closed_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r avslut"
+    }
+  },
+  "required": [
+    "incident_date",
+    "type",
+    "description"
+  ]
+}

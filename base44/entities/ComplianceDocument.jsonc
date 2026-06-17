@@ -1,0 +1,59 @@
+{
+  "name": "ComplianceDocument",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Dokumentets titel"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "ledningssystem",
+        "rutiner",
+        "samtycke",
+        "riskbedomning",
+        "egenkontroll",
+        "hygien"
+      ],
+      "description": "Dokumentkategori"
+    },
+    "document_url": {
+      "type": "string",
+      "description": "URL till dokumentet (PDF el. l\u00e4nk)"
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date",
+      "description": "Giltigt fr\u00e5n"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date",
+      "description": "Giltigt till \u2013 triggar p\u00e5minnelse"
+    },
+    "last_reviewed_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Senast granskad"
+    },
+    "reviewed_by": {
+      "type": "string",
+      "description": "Granskad av"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "current",
+        "needs_review",
+        "expired"
+      ],
+      "default": "current",
+      "description": "Dokumentstatus"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}
