@@ -8,10 +8,12 @@ import { Plus, ArrowLeft, GraduationCap } from "lucide-react";
 import StatsOverview from "@/components/admin/StatsOverview";
 import ModuleRow from "@/components/admin/ModuleRow";
 import ModuleForm from "@/components/admin/ModuleForm";
+import SalesTab from "@/components/admin/SalesTab";
 
 export default function Admin() {
   const [showForm, setShowForm] = useState(false);
   const [editModule, setEditModule] = useState(null);
+  const [activeTab, setActiveTab] = useState("modules");
   const queryClient = useQueryClient();
 
   const { data: modules, isLoading } = useQuery({
@@ -90,81 +92,104 @@ export default function Admin() {
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         <StatsOverview modules={modules} />
 
-        {/* Timeline */}
-        <div className="bg-card rounded-xl border border-border/50 p-6">
-          <h2 className="font-heading text-lg font-semibold mb-4">Tidsplan</h2>
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 border border-accent/20">
-              <div className="w-2 h-2 rounded-full bg-accent" />
-              <span className="text-sm font-medium">23 juni: Inspelningsdag</span>
-            </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted border border-border">
-              <div className="w-2 h-2 rounded-full bg-muted-foreground/50" />
-              <span className="text-sm text-muted-foreground">Lanseringsdatum: TBD</span>
-            </div>
-          </div>
+        {/* Tab navigation */}
+        <div className="flex gap-1 border-b border-border/50">
+          {[{ id: "modules", label: "Moduler" }, { id: "sales", label: "Försäljning & Resultat" }].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? "border-accent text-accent"
+                  : "border-transparent text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        {/* Modules table */}
-        <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
-          <div className="p-6 flex items-center justify-between border-b border-border/50">
-            <h2 className="font-heading text-lg font-semibold">Moduler</h2>
-            <div className="flex gap-2">
-              <Link to="/admin/quiz">
-                <Button size="sm" variant="outline" className="gap-2">
-                  Quiz-hantering
-                </Button>
-              </Link>
-              <Button
-                size="sm"
-                className="bg-primary text-primary-foreground gap-2"
-                onClick={() => { setEditModule(null); setShowForm(true); }}
-              >
-                <Plus className="w-4 h-4" />
-                Ny modul
-              </Button>
-            </div>
-          </div>
+        {activeTab === "sales" && <SalesTab modules={modules} />}
 
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/30">
-                  <TableHead className="font-semibold">Modul</TableHead>
-                  <TableHead className="font-semibold">Status</TableHead>
-                  <TableHead className="font-semibold">Manus</TableHead>
-                  <TableHead className="font-semibold">Inspelning</TableHead>
-                  <TableHead className="font-semibold">PDF</TableHead>
-                  <TableHead className="font-semibold">Pris</TableHead>
-                  <TableHead className="font-semibold w-20"></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <td colSpan={7} className="py-12 text-center text-muted-foreground">Laddar...</td>
-                  </TableRow>
-                ) : modules.length === 0 ? (
-                  <TableRow>
-                    <td colSpan={7} className="py-12 text-center text-muted-foreground">
-                      Inga moduler ännu. Klicka "Ny modul" för att börja.
-                    </td>
-                  </TableRow>
-                ) : (
-                  modules.map((module) => (
-                    <ModuleRow
-                      key={module.id}
-                      module={module}
-                      onEdit={handleEdit}
-                      onDelete={(id) => deleteMutation.mutate(id)}
-                      onStatusChange={handleStatusChange}
-                    />
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
+        {activeTab === "modules" && (
+          <>
+            {/* Timeline */}
+            <div className="bg-card rounded-xl border border-border/50 p-6">
+              <h2 className="font-heading text-lg font-semibold mb-4">Tidsplan</h2>
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent/10 border border-accent/20">
+                  <div className="w-2 h-2 rounded-full bg-accent" />
+                  <span className="text-sm font-medium">23 juni: Inspelningsdag</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-muted border border-border">
+                  <div className="w-2 h-2 rounded-full bg-muted-foreground/50" />
+                  <span className="text-sm text-muted-foreground">Lanseringsdatum: TBD</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Modules table */}
+            <div className="bg-card rounded-xl border border-border/50 overflow-hidden">
+              <div className="p-6 flex items-center justify-between border-b border-border/50">
+                <h2 className="font-heading text-lg font-semibold">Moduler</h2>
+                <div className="flex gap-2">
+                  <Link to="/admin/quiz">
+                    <Button size="sm" variant="outline" className="gap-2">
+                      Quiz-hantering
+                    </Button>
+                  </Link>
+                  <Button
+                    size="sm"
+                    className="bg-primary text-primary-foreground gap-2"
+                    onClick={() => { setEditModule(null); setShowForm(true); }}
+                  >
+                    <Plus className="w-4 h-4" />
+                    Ny modul
+                  </Button>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-muted/30">
+                      <TableHead className="font-semibold">Modul</TableHead>
+                      <TableHead className="font-semibold">Status</TableHead>
+                      <TableHead className="font-semibold">Manus</TableHead>
+                      <TableHead className="font-semibold">Inspelning</TableHead>
+                      <TableHead className="font-semibold">PDF</TableHead>
+                      <TableHead className="font-semibold">Pris</TableHead>
+                      <TableHead className="font-semibold w-20"></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {isLoading ? (
+                      <TableRow>
+                        <td colSpan={7} className="py-12 text-center text-muted-foreground">Laddar...</td>
+                      </TableRow>
+                    ) : modules.length === 0 ? (
+                      <TableRow>
+                        <td colSpan={7} className="py-12 text-center text-muted-foreground">
+                          Inga moduler ännu. Klicka "Ny modul" för att börja.
+                        </td>
+                      </TableRow>
+                    ) : (
+                      modules.map((module) => (
+                        <ModuleRow
+                          key={module.id}
+                          module={module}
+                          onEdit={handleEdit}
+                          onDelete={(id) => deleteMutation.mutate(id)}
+                          onStatusChange={handleStatusChange}
+                        />
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {showForm && (

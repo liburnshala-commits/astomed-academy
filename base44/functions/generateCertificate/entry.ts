@@ -253,6 +253,18 @@ Deno.serve(async (req) => {
     // Save certificate_url on the quiz result
     await base44.asServiceRole.entities.QuizResult.update(quiz_result_id, { certificate_url });
 
+    // Send certificate email
+    const recipientEmail = result.user_email || user.email;
+    const emailName = result.user_name || user.full_name || "Deltagare";
+    if (recipientEmail) {
+      await base44.asServiceRole.integrations.Core.SendEmail({
+        to: recipientEmail,
+        subject: `Ditt Astomed Academy-certifikat: Modul ${module.module_number}`,
+        body: `Hej ${emailName},\n\nGrattis! Du har godkänts i kunskapskontrollen för:\n\nModul ${module.module_number}: ${module.title}\nResultat: ${Math.round(result.score)}%\n\nDitt certifikat finns tillgängligt i appen under "Mina certifikat", eller ladda ner det direkt:\n${certificate_url}\n\nMed vänliga hälsningar,\nAstomed Academy`,
+      });
+      console.log("Certificate email sent to", recipientEmail);
+    }
+
     return Response.json({ certificate_url });
   } catch (error) {
     console.error('Certificate generation error:', error);
