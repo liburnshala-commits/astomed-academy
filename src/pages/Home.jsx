@@ -4,6 +4,8 @@ import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
 import CourseSalesSection from "@/components/landing/CourseSalesSection";
 import CourseSection from "@/components/landing/CourseSection";
+import PremiumModulesSection from "@/components/landing/PremiumModulesSection";
+import SpecialistCoursesSection from "@/components/landing/SpecialistCoursesSection";
 import AboutSection from "@/components/landing/AboutSection";
 import Footer from "@/components/landing/Footer";
 import { CheckCircle } from "lucide-react";
@@ -29,6 +31,8 @@ export default function Home() {
       )}
       <CourseSalesSection />
       <CourseSection />
+      <PremiumModulesSection />
+      <SpecialistCoursesSection />
       <AboutSection />
       <Footer />
     </div>

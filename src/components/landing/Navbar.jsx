@@ -32,7 +32,9 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
-          <a href="#kurser" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Kurser</a>
+          <a href="#kurser" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Grundkurs</a>
+          <a href="#premiummoduler" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Premiummoduler</a>
+          <a href="#specialistkurser" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Specialistkurser</a>
           <a href="#om-oss" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Om oss</a>
           <a href="#kontakt" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Kontakt</a>
           {isAuthenticated && (
@@ -55,7 +57,9 @@ export default function Navbar() {
 
       {open && (
         <div className="md:hidden bg-white border-b border-border px-6 py-4 space-y-3">
-          <a href="#kurser" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Kurser</a>
+          <a href="#kurser" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Grundkurs</a>
+          <a href="#premiummoduler" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Premiummoduler</a>
+          <a href="#specialistkurser" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Specialistkurser</a>
           <a href="#om-oss" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Om oss</a>
           <a href="#kontakt" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Kontakt</a>
           {isAuthenticated && (

@@ -22,13 +22,14 @@ export default function CourseSection() {
           transition={{ duration: 0.6 }}
           className="max-w-2xl"
         >
-          <p className="text-xs font-body font-semibold uppercase tracking-widest text-accent mb-3">Pilotkurs</p>
+          <p className="text-xs font-body font-semibold uppercase tracking-widest text-accent mb-3">Grundkurs</p>
           <h2 className="font-heading text-3xl md:text-4xl font-semibold text-foreground leading-tight">
-            Legitimation och yrkesansvar
+            Från idé till startklar klinik
           </h2>
           <p className="mt-4 font-body text-muted-foreground leading-relaxed">
-            Rättigheter, skyldigheter och risker. Fem fokuserade moduler som ger dig det juridiska grundskyddet 
-            för din kliniska verksamhet.
+            En helhetsbild av de viktigaste regelverken och rättsområdena — patientsäkerhet, journalföring, 
+            dataskydd, hygien, marknadsföring och ledningssystem. Riktar sig till dig som planerar att starta 
+            eller nyligen har etablerat en skönhetsklinik.
           </p>
         </motion.div>
 
