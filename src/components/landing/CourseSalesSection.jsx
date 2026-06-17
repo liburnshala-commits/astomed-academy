@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, ShoppingCart, Zap, Shield, Award, FileText } from "lucide-react";
 
@@ -17,14 +18,25 @@ const benefits = [
 
 export default function CourseSalesSection() {
   const [loading, setLoading] = useState(false);
+  const { user, isAuthenticated } = useAuth();
 
   const { data: modules = [] } = useQuery({
     queryKey: ["modules"],
     queryFn: () => base44.entities.Module.list("module_number"),
   });
 
-  const publishedCount = modules.filter((m) => m.status === "published").length;
+  const publishedModules = modules.filter((m) => m.status === "published");
   const totalModules = modules.length || 5;
+
+  // Check if user already has all published modules purchased
+  const { data: userPurchases = [] } = useQuery({
+    queryKey: ["user-purchases", user?.id],
+    enabled: !!user?.id && publishedModules.length > 0,
+    queryFn: () => base44.entities.Purchase.filter({ user_id: user.id, status: "completed" }),
+  });
+
+  const purchasedIds = new Set(userPurchases.map((p) => p.module_id));
+  const hasBundle = publishedModules.length > 0 && publishedModules.every((m) => purchasedIds.has(m.id));
 
   const handleBundleCheckout = async () => {
     if (window.self !== window.top) {
@@ -111,15 +123,22 @@ export default function CourseSalesSection() {
                 ))}
               </ul>
 
-              <Button
-                size="lg"
-                className="w-full bg-accent hover:bg-accent/90 text-white gap-2 font-body font-semibold uppercase tracking-wide rounded-sm h-12"
-                onClick={handleBundleCheckout}
-                disabled={loading}
-              >
-                <ShoppingCart className="w-4 h-4" />
-                {loading ? "Laddar..." : `Köp hela kursen – ${BUNDLE_PRICE} kr`}
-              </Button>
+              {hasBundle ? (
+                <div className="flex items-center justify-center gap-2 py-3 bg-accent/20 rounded-sm border border-accent/30 text-accent font-semibold text-sm">
+                  <CheckCircle className="w-4 h-4" />
+                  Du har tillgång till hela kursen
+                </div>
+              ) : (
+                <Button
+                  size="lg"
+                  className="w-full bg-accent hover:bg-accent/90 text-white gap-2 font-body font-semibold uppercase tracking-wide rounded-sm h-12"
+                  onClick={handleBundleCheckout}
+                  disabled={loading}
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  {loading ? "Laddar..." : `Köp hela kursen – ${BUNDLE_PRICE} kr`}
+                </Button>
+              )}
 
               <p className="text-center text-xs text-white/40">
                 Vill du köpa enstaka moduler? Välj modul nedan — {SINGLE_PRICE_LABEL}
