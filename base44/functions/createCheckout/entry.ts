@@ -3,11 +3,43 @@ import Stripe from 'npm:stripe@14.21.0';
 
 Deno.serve(async (req) => {
   try {
-    const { module_id, success_url, cancel_url } = await req.json();
+    const { module_id, success_url, cancel_url, bundle, bundle_price } = await req.json();
 
     const base44 = createClientFromRequest(req);
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY"));
 
+    const origin = req.headers.get("origin") || "https://app.base44.com";
+
+    // --- Bundle checkout ---
+    if (bundle) {
+      const price = bundle_price || 1995;
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        mode: "payment",
+        line_items: [
+          {
+            price_data: {
+              currency: "sek",
+              unit_amount: Math.round(price * 100),
+              product_data: {
+                name: "Grundkursen – Legitimation och yrkesansvar (alla moduler)",
+                description: "Tillgång till samtliga moduler, PDF-resurser och certifikat",
+              },
+            },
+            quantity: 1,
+          },
+        ],
+        metadata: {
+          base44_app_id: Deno.env.get("BASE44_APP_ID"),
+          bundle: "true",
+        },
+        success_url: success_url || `${origin}/?payment=bundle_success`,
+        cancel_url: cancel_url || `${origin}/`,
+      });
+      return Response.json({ checkout_url: session.url, session_id: session.id });
+    }
+
+    // --- Single module checkout ---
     // Require authenticated user
     const user = await base44.auth.me();
     if (!user) {
@@ -53,8 +85,8 @@ Deno.serve(async (req) => {
         buyer_email: user.email || "",
         buyer_name: user.full_name || "",
       },
-      success_url: success_url || `${req.headers.get("origin")}/modul/${module_id}?payment=success`,
-      cancel_url: cancel_url || `${req.headers.get("origin")}/modul/${module_id}`,
+      success_url: success_url || `${origin}/modul/${module_id}?payment=success`,
+      cancel_url: cancel_url || `${origin}/modul/${module_id}`,
     });
 
     return Response.json({ checkout_url: session.url, session_id: session.id });
