@@ -1,0 +1,45 @@
+{
+  "name": "StaffCertification",
+  "type": "object",
+  "properties": {
+    "staff_name": {
+      "type": "string",
+      "description": "Personalens fullst\u00e4ndiga namn"
+    },
+    "equipment_id": {
+      "type": "string",
+      "description": "Kopplad utrustning (Equipment.id)"
+    },
+    "equipment_name": {
+      "type": "string",
+      "description": "Utrustningens namn \u2013 denormaliserat f\u00f6r visning"
+    },
+    "certification_name": {
+      "type": "string",
+      "description": "Namn p\u00e5 utbildning/beh\u00f6righet, t.ex. 'SSM-utbildning Klass 4 Laser'"
+    },
+    "issued_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Utf\u00e4rdandedatum"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Utg\u00e5ngsdatum"
+    },
+    "issued_by": {
+      "type": "string",
+      "description": "Utf\u00e4rdare, t.ex. kursarrang\u00f6r eller SSM"
+    },
+    "certificate_url": {
+      "type": "string",
+      "description": "URL till intyget (PDF)"
+    }
+  },
+  "required": [
+    "staff_name",
+    "certification_name",
+    "issued_date"
+  ]
+}

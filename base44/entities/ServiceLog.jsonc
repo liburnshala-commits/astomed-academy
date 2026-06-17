@@ -1,0 +1,51 @@
+{
+  "name": "ServiceLog",
+  "type": "object",
+  "properties": {
+    "equipment_id": {
+      "type": "string",
+      "description": "Kopplad utrustning (Equipment.id)"
+    },
+    "equipment_name": {
+      "type": "string",
+      "description": "Utrustningens namn \u2013 denormaliserat f\u00f6r visning"
+    },
+    "service_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Datum f\u00f6r service"
+    },
+    "service_type": {
+      "type": "string",
+      "enum": [
+        "calibration",
+        "maintenance",
+        "repair",
+        "inspection"
+      ],
+      "description": "Typ av service"
+    },
+    "performed_by": {
+      "type": "string",
+      "description": "Utf\u00f6rare (namn/f\u00f6retag)"
+    },
+    "next_service_date": {
+      "type": "string",
+      "format": "date",
+      "description": "N\u00e4sta service rekommenderas"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Anteckningar fr\u00e5n servicetillf\u00e4llet"
+    },
+    "document_url": {
+      "type": "string",
+      "description": "URL till serviceprotokoll (PDF)"
+    }
+  },
+  "required": [
+    "equipment_id",
+    "service_date",
+    "service_type"
+  ]
+}

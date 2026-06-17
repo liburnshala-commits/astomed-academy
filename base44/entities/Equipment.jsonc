@@ -1,0 +1,68 @@
+{
+  "name": "Equipment",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Utrustningens namn, t.ex. 'Alexandrit Laser Candela Elite'"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "laser",
+        "ipl",
+        "co2",
+        "rf",
+        "other"
+      ],
+      "description": "Typ av utrustning"
+    },
+    "serial_number": {
+      "type": "string",
+      "description": "Serienummer"
+    },
+    "manufacturer": {
+      "type": "string",
+      "description": "Tillverkare"
+    },
+    "purchase_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Ink\u00f6psdatum"
+    },
+    "next_service_date": {
+      "type": "string",
+      "format": "date",
+      "description": "N\u00e4sta service/kalibrering"
+    },
+    "risk_class": {
+      "type": "string",
+      "enum": [
+        "class_3b",
+        "class_4",
+        "ipl",
+        "co2",
+        "other"
+      ],
+      "description": "Riskklassificering"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "under_service"
+      ],
+      "default": "active",
+      "description": "Aktuell status"
+    },
+    "notes": {
+      "type": "string",
+      "description": "\u00d6vriga anteckningar"
+    }
+  },
+  "required": [
+    "name",
+    "type"
+  ]
+}
