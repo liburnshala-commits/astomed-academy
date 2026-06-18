@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Award, Search, User, LogOut, ChevronDown } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
@@ -14,6 +14,10 @@ export default function Navbar() {
   const searchRef = useRef(null);
   const userMenuRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
+  const navHref = (anchor) => isHome ? anchor : `/${anchor}`;
 
   useEffect(() => {
     const onScroll = () => {};
@@ -89,11 +93,11 @@ export default function Navbar() {
         {/* Desktop nav */}
         {!searchOpen && (
           <div className="hidden md:flex items-center gap-6">
-            <a href="#kurser" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Grundkurs</a>
-            <a href="#premiummoduler" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Premiummoduler</a>
-            <a href="#specialistkurser" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Specialistkurser</a>
-            <a href="#om-oss" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Om oss</a>
-            <a href="#kontakt" className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Kontakt</a>
+            <a href={navHref("#kurser")} className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Grundkurs</a>
+            <a href={navHref("#premiummoduler")} className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Premiummoduler</a>
+            <a href={navHref("#specialistkurser")} className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Specialistkurser</a>
+            <a href={navHref("#om-oss")} className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Om oss</a>
+            <a href={navHref("#kontakt")} className="text-sm font-body font-medium text-foreground/70 hover:text-foreground transition-colors">Kontakt</a>
           </div>
         )}
 
@@ -178,11 +182,11 @@ export default function Navbar() {
       {/* Mobile menu */}
       {open && (
         <div className="md:hidden bg-white border-b border-border px-6 py-4 space-y-3">
-          <a href="#kurser" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Grundkurs</a>
-          <a href="#premiummoduler" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Premiummoduler</a>
-          <a href="#specialistkurser" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Specialistkurser</a>
-          <a href="#om-oss" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Om oss</a>
-          <a href="#kontakt" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Kontakt</a>
+          <a href={navHref("#kurser")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Grundkurs</a>
+          <a href={navHref("#premiummoduler")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Premiummoduler</a>
+          <a href={navHref("#specialistkurser")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Specialistkurser</a>
+          <a href={navHref("#om-oss")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Om oss</a>
+          <a href={navHref("#kontakt")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-foreground/70">Kontakt</a>
           <hr className="border-border" />
           {isAuthenticated ? (
             <>
