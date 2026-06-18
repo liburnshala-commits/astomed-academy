@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, ShoppingCart, Zap, Shield, Award, FileText } from "lucide-react";
+import PrivacyPolicyModal from "./PrivacyPolicyModal";
 
 const BUNDLE_PRICE = 2499;
 const SINGLE_PRICE_LABEL = "899–1 499 kr/modul";
@@ -18,6 +19,8 @@ const benefits = [
 
 export default function CourseSalesSection() {
   const [loading, setLoading] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const { user, isAuthenticated } = useAuth();
 
   const { data: modules = [] } = useQuery({
@@ -39,6 +42,10 @@ export default function CourseSalesSection() {
   const hasBundle = publishedModules.length > 0 && publishedModules.every((m) => purchasedIds.has(m.id));
 
   const handleBundleCheckout = async () => {
+    if (!privacyAccepted) {
+      alert("Du måste godkänna integritetspolicyn för att fortsätta.");
+      return;
+    }
     if (window.self !== window.top) {
       alert("Betalning fungerar bara från den publicerade appen, inte i förhandsvisning.");
       return;
@@ -125,6 +132,29 @@ export default function CourseSalesSection() {
                 ))}
               </ul>
 
+              {/* Privacy consent */}
+              {!hasBundle && (
+                <label className="flex items-start gap-2.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={privacyAccepted}
+                    onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                    className="mt-0.5 w-4 h-4 rounded border-white/30 bg-white/10 accent-accent shrink-0 cursor-pointer"
+                  />
+                  <span className="text-xs font-body text-white/70 leading-relaxed">
+                    Jag har läst och godkänner{" "}
+                    <button
+                      type="button"
+                      onClick={() => setShowPrivacyModal(true)}
+                      className="underline text-accent hover:text-accent/80 transition-colors"
+                    >
+                      integritetspolicyn
+                    </button>
+                    {" "}och att Astomed AB och Medlaw behandlar mina personuppgifter.
+                  </span>
+                </label>
+              )}
+
               {hasBundle ? (
                 <div className="flex items-center justify-center gap-2 py-3 bg-accent/20 rounded-sm border border-accent/30 text-accent font-semibold text-sm">
                   <CheckCircle className="w-4 h-4" />
@@ -135,7 +165,7 @@ export default function CourseSalesSection() {
                   size="lg"
                   className="w-full bg-accent hover:bg-accent/90 text-white gap-2 font-body font-semibold uppercase tracking-wide rounded-sm h-12"
                   onClick={handleBundleCheckout}
-                  disabled={loading}
+                  disabled={loading || !privacyAccepted}
                 >
                   <ShoppingCart className="w-4 h-4" />
                   {loading ? "Laddar..." : `Köp hela kursen – ${BUNDLE_PRICE} kr`}
@@ -149,6 +179,7 @@ export default function CourseSalesSection() {
           </motion.div>
         </div>
       </div>
+      {showPrivacyModal && <PrivacyPolicyModal onClose={() => setShowPrivacyModal(false)} />}
     </section>
   );
 }
