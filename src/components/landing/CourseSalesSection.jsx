@@ -55,8 +55,9 @@ export default function CourseSalesSection() {
   };
 
   return (
-    <section className="bg-primary text-primary-foreground py-16 md:py-20">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="relative bg-primary text-primary-foreground py-16 md:py-20 overflow-hidden">
+      <div className="absolute inset-0 opacity-15" style={{backgroundImage: "url('https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/b889a35d1_Astomed_Pattern_Turquise_Secondary.png')", backgroundSize: "cover", backgroundPosition: "center"}} />
+      <div className="relative max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left: Pitch */}
           <motion.div

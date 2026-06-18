@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 export default function Hero() {
   return (
     <section className="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden bg-primary text-primary-foreground">
-      {/* Subtle background texture like Astomed */}
-      <div className="absolute inset-0 opacity-[0.04]" style={{backgroundImage: "url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1920&q=80&fit=crop')", backgroundSize: "cover", backgroundPosition: "center"}} />
-      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/95 to-primary/80" />
+      {/* Astomed brand pattern overlay */}
+      <div className="absolute inset-0 opacity-20" style={{backgroundImage: "url('https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/549e6a129_Astomed_Pattern_Blue_Primary.png')", backgroundSize: "cover", backgroundPosition: "center"}} />
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/80 to-primary/60" />
 
       <div className="relative max-w-7xl mx-auto px-6">
         <div className="max-w-3xl">

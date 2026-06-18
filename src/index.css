@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,82 +6,95 @@
 
 @layer base {
   :root {
-    /* Astomed: clean light mode based on their off-white/light gray */
-    --background: 210 17% 97%;
-    --foreground: 220 25% 10%;
+    /* Astomed Brand Colors */
+    /* Primary background: Cream #FFF8EF */
+    --background: 33 100% 97%;
+    --foreground: 0 2% 13%;
+
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card-foreground: 0 2% 13%;
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
-    /* Primary: Astomed dark navy/charcoal */
-    --primary: 220 25% 12%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 210 15% 93%;
-    --secondary-foreground: 220 25% 12%;
-    --muted: 210 15% 94%;
-    --muted-foreground: 220 10% 50%;
-    /* Accent: Astomed teal/blue */
-    --accent: 196 70% 42%;
+    --popover-foreground: 0 2% 13%;
+
+    /* Primary: Dark Navy #00283C */
+    --primary: 202 100% 12%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary: Warm Gray #E1D8CB */
+    --secondary: 34 24% 84%;
+    --secondary-foreground: 0 2% 13%;
+
+    --muted: 34 24% 90%;
+    --muted-foreground: 30 10% 45%;
+
+    /* Accent: Turquoise #3DAEB5 */
+    --accent: 183 48% 47%;
     --accent-foreground: 0 0% 100%;
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 210 15% 88%;
-    --input: 210 15% 88%;
-    --ring: 196 70% 42%;
-    --chart-1: 220 25% 12%;
-    --chart-2: 196 70% 42%;
-    --chart-3: 173 58% 39%;
-    --chart-4: 197 37% 24%;
-    --chart-5: 12 76% 61%;
-    --radius: 0.5rem;
-    --font-heading: 'Poppins', Arial, sans-serif;
-    --font-body: 'Lato', Arial, sans-serif;
-    --font-display: 'Poppins', Arial, sans-serif;
+
+    --border: 34 20% 85%;
+    --input: 34 20% 85%;
+    --ring: 183 48% 47%;
+
+    --chart-1: 202 100% 12%;
+    --chart-2: 183 48% 47%;
+    --chart-3: 25 40% 63%;
+    --chart-4: 34 24% 84%;
+    --chart-5: 0 2% 13%;
+
+    --radius: 0.25rem;
+
+    --font-heading: 'Satoshi', Arial, sans-serif;
+    --font-body: 'Satoshi', Arial, sans-serif;
+    --font-display: 'Satoshi', Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary: 202 100% 12%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 196 70% 42%;
+    --sidebar-accent: 34 24% 90%;
+    --sidebar-accent-foreground: 0 2% 13%;
+    --sidebar-border: 34 20% 85%;
+    --sidebar-ring: 183 48% 47%;
   }
 
   .dark {
-    /* Astomed dark theme: deep charcoal background, white text */
-    --background: 220 15% 9%;
+    /* Dark: Navy #00283C as background */
+    --background: 202 100% 12%;
     --foreground: 0 0% 95%;
-    --card: 220 15% 12%;
+    --card: 202 80% 16%;
     --card-foreground: 0 0% 95%;
-    --popover: 220 15% 12%;
+    --popover: 202 80% 16%;
     --popover-foreground: 0 0% 95%;
-    --primary: 196 70% 45%;
+    --primary: 183 48% 47%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 15% 18%;
+    --secondary: 202 60% 20%;
     --secondary-foreground: 0 0% 95%;
-    --muted: 220 15% 16%;
-    --muted-foreground: 220 10% 60%;
-    --accent: 196 70% 45%;
+    --muted: 202 60% 18%;
+    --muted-foreground: 183 20% 65%;
+    --accent: 183 48% 47%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 45%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
-    --ring: 196 70% 45%;
-    --chart-1: 196 70% 45%;
-    --chart-2: 220 25% 40%;
-    --chart-3: 173 58% 39%;
-    --chart-4: 280 65% 60%;
+    --border: 202 40% 22%;
+    --input: 202 40% 22%;
+    --ring: 183 48% 47%;
+    --chart-1: 183 48% 47%;
+    --chart-2: 202 100% 12%;
+    --chart-3: 25 40% 63%;
+    --chart-4: 34 24% 84%;
     --chart-5: 340 75% 55%;
-    --sidebar-background: 220 15% 8%;
+    --sidebar-background: 202 100% 10%;
     --sidebar-foreground: 0 0% 92%;
-    --sidebar-primary: 196 70% 45%;
+    --sidebar-primary: 183 48% 47%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 15% 16%;
+    --sidebar-accent: 202 60% 18%;
     --sidebar-accent-foreground: 0 0% 92%;
-    --sidebar-border: 220 15% 18%;
-    --sidebar-ring: 196 70% 45%;
+    --sidebar-border: 202 40% 20%;
+    --sidebar-ring: 183 48% 47%;
   }
 }
 

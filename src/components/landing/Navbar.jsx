@@ -55,16 +55,18 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-border/40">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-end gap-2 shrink-0">
+        <Link to="/" className="flex items-center gap-2.5 shrink-0">
           <img
-            src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/e4179d601_2f5b9caa-454e-4c2c-b6d4-ffd1f033caa6.png"
-            alt="Astomed Academy"
-            className="h-8 w-auto"
+            src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/459de9175_Astomed_Symbol_bl.png"
+            alt="Astomed"
+            className="h-7 w-auto"
           />
-          <div className="flex flex-col items-end">
-            <span className="text-base font-body font-semibold text-foreground leading-none">ASTOMED</span>
-            <span className="text-[9px] font-body font-semibold text-foreground leading-none">ACADEMY</span>
-          </div>
+          <img
+            src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/37dec4d6c_Astomed_Wordmark_bl.png"
+            alt="Astomed"
+            className="h-5 w-auto"
+          />
+          <span className="text-[10px] font-body font-medium text-foreground/50 tracking-widest uppercase ml-0.5">Academy</span>
         </Link>
 
         {/* Search bar (expands inline) */}

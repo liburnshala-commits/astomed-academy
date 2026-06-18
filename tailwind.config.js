@@ -62,9 +62,9 @@ module.exports = {
   			}
   		},
 		fontFamily: {
-			heading: ['Poppins', 'Arial', 'sans-serif'],
-			body: ['Lato', 'Arial', 'sans-serif'],
-			display: ['Poppins', 'Arial', 'sans-serif'],
+			heading: ['Satoshi', 'Arial', 'sans-serif'],
+			body: ['Satoshi', 'Arial', 'sans-serif'],
+			display: ['Satoshi', 'Arial', 'sans-serif'],
 			mono: ['var(--font-mono)']
 		},
   		keyframes: {
