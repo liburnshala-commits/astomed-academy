@@ -39,6 +39,15 @@ Deno.serve(async (req) => {
           });
         }
         console.log(`Bundle purchase: created ${allModules.length} purchases, session=${session.id}`);
+
+        // Send notification email to Astomed
+        const buyerEmail = buyer_email || session.customer_email || "okänd";
+        const buyerName = buyer_name || "okänt namn";
+        await base44.asServiceRole.integrations.Core.SendEmail({
+          to: "liburn@astomed.se",
+          subject: `Nytt köp – Grundkursen: ${buyerName}`,
+          body: `En ny kund har köpt Grundkursen.\n\nNamn: ${buyerName}\nE-post: ${buyerEmail}\nBelopp: ${session.amount_total ? session.amount_total / 100 : 0} kr\nStripe session: ${session.id}\n\nKomma ihåg att bjuda in kunden via admin-panelen om de inte redan har ett konto.`,
+        });
       } else if (module_id) {
         // Single module purchase
         await base44.asServiceRole.entities.Purchase.create({
@@ -51,6 +60,15 @@ Deno.serve(async (req) => {
           stripe_session_id: session.id,
         });
         console.log(`Purchase created: module=${module_id}, user=${user_id}, email=${buyer_email}`);
+
+        // Send notification email to Astomed
+        const buyerEmailSingle = buyer_email || session.customer_email || "okänd";
+        const buyerNameSingle = buyer_name || "okänt namn";
+        await base44.asServiceRole.integrations.Core.SendEmail({
+          to: "liburn@astomed.se",
+          subject: `Nytt köp – Modul: ${buyerNameSingle}`,
+          body: `En ny kund har köpt en modul.\n\nNamn: ${buyerNameSingle}\nE-post: ${buyerEmailSingle}\nModul ID: ${module_id}\nBelopp: ${session.amount_total ? session.amount_total / 100 : 0} kr\nStripe session: ${session.id}`,
+        });
       }
     }
 
