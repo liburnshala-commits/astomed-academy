@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Navbar from "@/components/landing/Navbar";
 import Hero from "@/components/landing/Hero";
 import CourseSalesSection from "@/components/landing/CourseSalesSection";
+import NewsSection from "@/components/landing/NewsSection";
 import CourseSection from "@/components/landing/CourseSection";
 import PremiumModulesSection from "@/components/landing/PremiumModulesSection";
 import SpecialistCoursesSection from "@/components/landing/SpecialistCoursesSection";
@@ -30,6 +31,7 @@ export default function Home() {
         </div>
       )}
       <CourseSalesSection />
+      <NewsSection />
       <CourseSection />
       <PremiumModulesSection />
       <SpecialistCoursesSection />

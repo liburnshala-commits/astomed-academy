@@ -1,15 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import ModuleCard from "./ModuleCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Search } from "lucide-react";
 
 export default function CourseSection() {
+  const [query, setQuery] = useState("");
   const { data: modules, isLoading } = useQuery({
     queryKey: ["modules"],
     queryFn: () => base44.entities.Module.list("module_number"),
     initialData: [],
+  });
+
+  const filteredModules = modules.filter((m) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      m.title?.toLowerCase().includes(q) ||
+      m.description?.toLowerCase().includes(q)
+    );
   });
 
   return (
@@ -33,15 +44,32 @@ export default function CourseSection() {
           </p>
         </motion.div>
 
-        <div className="mt-12 grid gap-4 md:gap-6">
+        {modules.length > 0 && (
+          <div className="mt-8 relative max-w-md">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Sök bland moduler..."
+              className="w-full h-10 pl-10 pr-4 rounded-lg border border-border bg-background text-sm font-body focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+        )}
+
+        <div className="mt-8 grid gap-4 md:gap-6">
           {isLoading ? (
             Array(5).fill(0).map((_, i) => (
               <Skeleton key={i} className="h-48 rounded-2xl" />
             ))
-          ) : modules.length > 0 ? (
-            modules.map((module, index) => (
+          ) : filteredModules.length > 0 ? (
+            filteredModules.map((module, index) => (
               <ModuleCard key={module.id} module={module} index={index} />
             ))
+          ) : modules.length > 0 ? (
+            <div className="text-center py-12 text-muted-foreground">
+              <p className="text-sm">Inga moduler matchar din sökning.</p>
+            </div>
           ) : (
             <div className="text-center py-20 text-muted-foreground">
               <p className="text-lg">Moduler laddas upp snart.</p>
