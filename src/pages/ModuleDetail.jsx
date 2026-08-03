@@ -191,12 +191,13 @@ export default function ModuleDetail() {
                   {/* Video first */}
                   {module.video_url ? (
                     <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
-                      <div className="aspect-video bg-black">
+                      <div className="w-full bg-black flex items-center justify-center">
                         <video
                           src={module.video_url}
                           controls
                           playsInline
-                          className="w-full h-full"
+                          preload="metadata"
+                          className="w-full h-auto max-w-full block"
                           title={module.title}
                         />
                       </div>
