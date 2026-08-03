@@ -4,20 +4,18 @@ import { generateAndSendCertificate } from '../../shared/certificate.ts';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
-    }
 
-    const { quiz_result_id } = await req.json();
+    // Triggered by the QuizResult entity automation: { event, data }
+    const body = await req.json();
+    const quiz_result_id = body?.event?.entity_id || body?.data?.id || body?.quiz_result_id;
     if (!quiz_result_id) {
       return Response.json({ error: 'Missing quiz_result_id' }, { status: 400 });
     }
 
-    const result = await generateAndSendCertificate(base44, quiz_result_id, user);
+    const result = await generateAndSendCertificate(base44.asServiceRole, quiz_result_id, null);
     return Response.json(result);
   } catch (error) {
-    console.error('Certificate generation error:', error);
+    console.error('issueCertificate error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
