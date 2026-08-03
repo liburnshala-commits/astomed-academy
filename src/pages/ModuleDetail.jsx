@@ -22,6 +22,17 @@ const statusLabels = {
   published: "Tillgänglig",
 };
 
+// Dropbox share links redirect via www.dropbox.com which mobile Safari won't
+// follow inside a <video> tag. dl.dropboxusercontent.com serves the raw file
+// directly without a redirect.
+function directVideoUrl(url) {
+  if (!url) return url;
+  return url.replace(
+    /^(https?:\/\/)(www\.)?dropbox\.com\//,
+    "$1dl.dropboxusercontent.com/"
+  );
+}
+
 export default function ModuleDetail() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -190,8 +201,9 @@ export default function ModuleDetail() {
                     <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
                       <div className="aspect-video bg-black">
                         <video
-                          src={module.video_url}
+                          src={directVideoUrl(module.video_url)}
                           controls
+                          playsInline
                           className="w-full h-full"
                           title={module.title}
                         />
