@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  ArrowLeft, Clock, FileText, Download, PlayCircle,
+  ArrowLeft, ArrowRight, Clock, FileText, Download, PlayCircle,
   Lock, CheckCircle, ShoppingCart, LogIn, Award
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -65,6 +65,11 @@ export default function ModuleDetail() {
     },
   });
 
+  const { data: allModules = [] } = useQuery({
+    queryKey: ["modules"],
+    queryFn: () => base44.entities.Module.list("module_number"),
+  });
+
   const handleCheckout = async () => {
     if (window.self !== window.top) {
       alert("Betalning fungerar bara från den publicerade appen, inte i förhandsvisning.");
@@ -112,6 +117,9 @@ export default function ModuleDetail() {
   const isPublished = module.status === "published";
   const hasPurchased = !!purchase;
   const isCompletedAndLocked = hasPurchased && !!certificate;
+  const nextModule = allModules.find(
+    (m) => m.module_number === module.module_number + 1
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -172,42 +180,17 @@ export default function ModuleDetail() {
 
           {isPublished && (
             <>
-              {/* Completed & locked */}
-              {isCompletedAndLocked && (
-                <div className="mt-8 bg-amber-50 border border-amber-200 rounded-2xl p-8 text-center">
-                  <Award className="w-10 h-10 text-amber-500 mx-auto mb-3" />
-                  <h3 className="font-heading text-lg font-semibold text-amber-900">Utbildning avklarad</h3>
-                  <p className="text-sm text-amber-700 mt-2 max-w-md mx-auto">
-                    Du har godkänts och erhållit ett certifikat för denna modul. Kursinnehållet är nu låst.
-                  </p>
-                  {certificate.certificate_url && (
-                    <a href={certificate.certificate_url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block">
-                      <Button variant="outline" className="gap-2 border-amber-300 text-amber-800 hover:bg-amber-100">
-                        <Download className="w-4 h-4" />
-                        Ladda ner certifikat
-                      </Button>
-                    </a>
-                  )}
-                </div>
-              )}
-
-              {/* Purchased, not yet completed */}
-              {hasPurchased && !isCompletedAndLocked && (
+              {/* Purchased: video → quiz → next module */}
+              {hasPurchased && (
                 <div className="mt-8 space-y-4">
-                  <QuizPlayer
-                    moduleId={id}
-                    onCertificateReady={() => {
-                      queryClient.invalidateQueries({ queryKey: ["certificate", id, user?.id] });
-                    }}
-                  />
+                  {/* Video first */}
                   {module.video_url ? (
                     <div className="bg-card rounded-2xl border border-border/50 overflow-hidden">
-                      <div className="aspect-video">
-                        <iframe
+                      <div className="aspect-video bg-black">
+                        <video
                           src={module.video_url}
+                          controls
                           className="w-full h-full"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
                           title={module.title}
                         />
                       </div>
@@ -220,6 +203,8 @@ export default function ModuleDetail() {
                       </div>
                     </div>
                   )}
+
+                  {/* PDF resource */}
                   {module.pdf_url && (
                     <a href={module.pdf_url} target="_blank" rel="noopener noreferrer">
                       <Button variant="outline" className="gap-2">
@@ -227,6 +212,40 @@ export default function ModuleDetail() {
                         Ladda ner PDF-resurs
                       </Button>
                     </a>
+                  )}
+
+                  {/* Quiz (or success + next module when passed) */}
+                  {isCompletedAndLocked ? (
+                    <div className="bg-gradient-to-br from-emerald-950/40 to-teal-950/40 border border-emerald-500/20 rounded-2xl p-8 text-center">
+                      <Award className="w-10 h-10 text-emerald-400 mx-auto mb-3" />
+                      <h3 className="font-heading text-lg font-semibold text-white">Modul avklarad!</h3>
+                      <p className="text-sm text-emerald-300/70 mt-2 max-w-md mx-auto">
+                        Du har godkänts på kunskapskontrollen och erhållit ditt certifikat.
+                      </p>
+                      {certificate.certificate_url && (
+                        <a href={certificate.certificate_url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-block">
+                          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2">
+                            <Download className="w-4 h-4" />
+                            Ladda ner certifikat
+                          </Button>
+                        </a>
+                      )}
+                      {nextModule && (
+                        <Link to={`/modul/${nextModule.id}`} className="mt-4 block">
+                          <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 gap-2 w-full">
+                            Fortsätt till nästa modul: {nextModule.title}
+                            <ArrowRight className="w-4 h-4" />
+                          </Button>
+                        </Link>
+                      )}
+                    </div>
+                  ) : (
+                    <QuizPlayer
+                      moduleId={id}
+                      onCertificateReady={() => {
+                        queryClient.invalidateQueries({ queryKey: ["certificate", id, user?.id] });
+                      }}
+                    />
                   )}
                 </div>
               )}
