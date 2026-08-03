@@ -117,8 +117,9 @@ export default function ModuleDetail() {
   }
 
   const isPublished = module.status === "published";
-  const hasPurchased = !!purchase;
-  const isCompletedAndLocked = hasPurchased && !!certificate;
+  const isFree = !module.price;
+  const hasAccess = !!purchase || isFree;
+  const isCompletedAndLocked = hasAccess && !!certificate;
   const nextModule = allModules.find(
     (m) =>
       m.module_number === module.module_number + 1 &&
@@ -184,8 +185,8 @@ export default function ModuleDetail() {
 
           {isPublished && (
             <>
-              {/* Purchased: video → quiz → next module */}
-              {hasPurchased && (
+              {/* Purchased or free: video → quiz → next module */}
+              {hasAccess && (
                 <div className="mt-8 space-y-4">
                   {/* Video first */}
                   {module.video_url ? (
@@ -255,8 +256,8 @@ export default function ModuleDetail() {
                 </div>
               )}
 
-              {/* Not purchased */}
-              {!hasPurchased && module.price && (
+              {/* Not purchased and has a price */}
+              {!hasAccess && module.price && (
                 <div className="mt-8 bg-card rounded-2xl border border-accent/20 p-8">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                     <div>
