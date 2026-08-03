@@ -1,9 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
 import { GraduationCap, Scale, Users, Megaphone, ClipboardCheck, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import SpecialistModuleCard from "./SpecialistModuleCard";
 
-const courses = [
+const upcomingCourses = [
   {
     icon: Scale,
     title: "Arbetsrätt för kliniker",
@@ -31,6 +34,15 @@ const courses = [
 ];
 
 export default function SpecialistCoursesSection() {
+  const { data: modules = [] } = useQuery({
+    queryKey: ["modules"],
+    queryFn: () => base44.entities.Module.list("module_number"),
+  });
+
+  const specialistModules = modules.filter(
+    (m) => (m.category || "grundkurs") === "specialist" && m.status === "published"
+  );
+
   return (
     <section id="specialistkurser" className="py-20 md:py-28">
       <div className="max-w-7xl mx-auto px-6">
@@ -46,39 +58,56 @@ export default function SpecialistCoursesSection() {
             Fördjupning inom<br />specifika rättsområden
           </h2>
           <p className="mt-4 font-body text-muted-foreground leading-relaxed">
-            Mer omfattande kurser för dig som vill ha en gedigen kompetens inom ett specifikt juridiskt område. 
+            Mer omfattande kurser för dig som vill ha en gedigen kompetens inom ett specifikt juridiskt område.
             Framtagna av specialistjurister med lång erfarenhet av klinikbranschen.
           </p>
         </motion.div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-2">
-          {courses.map((course, i) => (
-            <motion.div
-              key={course.title}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-              className="bg-card border border-border/50 rounded-xl p-8 flex flex-col gap-4 hover:shadow-md transition-shadow"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/5 border border-border flex items-center justify-center shrink-0">
-                  <course.icon className="w-5 h-5 text-foreground" />
+        {/* Tillgängliga specialistmoduler */}
+        {specialistModules.length > 0 && (
+          <>
+            <p className="mt-14 text-xs font-body font-semibold uppercase tracking-widest text-foreground/60 mb-4">Tillgängliga nu</p>
+            <div className="grid gap-6 md:grid-cols-2">
+              {specialistModules.map((module, i) => (
+                <SpecialistModuleCard key={module.id} module={module} index={i} />
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Kommande kurser */}
+        <p className="mt-14 text-xs font-body font-semibold uppercase tracking-widest text-foreground/60 mb-4">Fler kurser under utveckling</p>
+        <div className="grid gap-6 md:grid-cols-2">
+          {upcomingCourses.map((course, i) => {
+            const Icon = course.icon;
+            return (
+              <motion.div
+                key={course.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                className="bg-card border border-border/50 rounded-xl p-8 flex flex-col gap-4 opacity-80"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary/5 border border-border flex items-center justify-center shrink-0">
+                    <Icon className="w-5 h-5 text-foreground" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-lg font-semibold text-foreground">{course.title}</h3>
+                    <p className="text-xs text-accent font-medium mt-0.5">{course.price}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-heading text-lg font-semibold text-foreground">{course.title}</h3>
-                  <p className="text-xs text-accent font-medium mt-0.5">{course.price}</p>
+                <p className="text-sm font-body text-muted-foreground leading-relaxed">{course.description}</p>
+                <div className="mt-auto pt-2">
+                  <button className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline">
+                    Anmäl intresse
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-              </div>
-              <p className="text-sm font-body text-muted-foreground leading-relaxed">{course.description}</p>
-              <div className="mt-auto pt-2">
-                <button className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline">
-                  Anmäl intresse
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         <motion.div
@@ -91,7 +120,7 @@ export default function SpecialistCoursesSection() {
           <GraduationCap className="w-10 h-10 text-muted-foreground/50 mx-auto mb-4" />
           <h3 className="font-heading text-lg font-semibold text-foreground">Skräddarsydda utbildningar</h3>
           <p className="mt-2 text-sm text-muted-foreground max-w-lg mx-auto">
-            Behöver ni en utbildning anpassad för er specifika verksamhet? Vi erbjuder även skräddarsydda 
+            Behöver ni en utbildning anpassad för er specifika verksamhet? Vi erbjuder även skräddarsydda
             kurser och workshops för klinikteam.
           </p>
           <a href="#kontakt" className="mt-6 inline-block">

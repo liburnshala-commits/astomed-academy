@@ -6,6 +6,15 @@
       "type": "string",
       "description": "ID of the parent course"
     },
+    "category": {
+      "type": "string",
+      "enum": [
+        "grundkurs",
+        "specialist"
+      ],
+      "default": "grundkurs",
+      "description": "Vilken kurskategori modulen tillh\u00f6r"
+    },
     "title": {
       "type": "string",
       "description": "Module title"

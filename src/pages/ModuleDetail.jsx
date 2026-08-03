@@ -118,7 +118,9 @@ export default function ModuleDetail() {
   const hasPurchased = !!purchase;
   const isCompletedAndLocked = hasPurchased && !!certificate;
   const nextModule = allModules.find(
-    (m) => m.module_number === module.module_number + 1
+    (m) =>
+      m.module_number === module.module_number + 1 &&
+      (m.category || "grundkurs") === (module.category || "grundkurs")
   );
 
   return (
