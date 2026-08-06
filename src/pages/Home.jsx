@@ -7,6 +7,7 @@ import NewsSection from "@/components/landing/NewsSection";
 import CourseSection from "@/components/landing/CourseSection";
 import PremiumModulesSection from "@/components/landing/PremiumModulesSection";
 import SpecialistCoursesSection from "@/components/landing/SpecialistCoursesSection";
+import PedagogySection from "@/components/landing/PedagogySection";
 import AboutSection from "@/components/landing/AboutSection";
 import Footer from "@/components/landing/Footer";
 import { CheckCircle } from "lucide-react";
@@ -35,6 +36,7 @@ export default function Home() {
       <CourseSection />
       <PremiumModulesSection />
       <SpecialistCoursesSection />
+      <PedagogySection />
       <AboutSection />
       <Footer />
     </div>
