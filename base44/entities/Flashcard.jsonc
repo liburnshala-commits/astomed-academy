@@ -1,0 +1,27 @@
+{
+  "name": "Flashcard",
+  "type": "object",
+  "properties": {
+    "module_id": {
+      "type": "string",
+      "description": "Kopplad modul (Module.id)"
+    },
+    "question": {
+      "type": "string",
+      "description": "Framsida \u2013 fr\u00e5gan (t.ex. 'I vilken lag regleras journalf\u00f6ring?')"
+    },
+    "answer": {
+      "type": "string",
+      "description": "Baksida \u2013 svaret (t.ex. 'Patientdatalagen')"
+    },
+    "order": {
+      "type": "number",
+      "description": "Visningsordning inom kortleken"
+    }
+  },
+  "required": [
+    "module_id",
+    "question",
+    "answer"
+  ]
+}

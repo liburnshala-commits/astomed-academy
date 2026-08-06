@@ -13,6 +13,7 @@ import { motion } from "framer-motion";
 import Navbar from "@/components/landing/Navbar";
 import Footer from "@/components/landing/Footer";
 import QuizPlayer from "@/components/quiz/QuizPlayer";
+import FlashcardPlayer from "@/components/flashcards/FlashcardPlayer";
 
 const statusLabels = {
   draft: "Under utveckling",
@@ -220,6 +221,9 @@ export default function ModuleDetail() {
                       </Button>
                     </a>
                   )}
+
+                  {/* Flashcards — active recall practice */}
+                  <FlashcardPlayer moduleId={id} />
 
                   {/* Quiz (or success + next module when passed) */}
                   {isCompletedAndLocked ? (
