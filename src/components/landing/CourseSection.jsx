@@ -15,7 +15,7 @@ export default function CourseSection() {
   });
 
   const filteredModules = modules.filter((m) => {
-    if ((m.category || "grundkurs") === "specialist") return false;
+    if ((m.category || "grundkurs") !== "grundkurs") return false;
     const q = query.trim().toLowerCase();
     if (!q) return true;
     return (

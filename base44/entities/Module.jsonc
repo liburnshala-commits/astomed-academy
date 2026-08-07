@@ -10,7 +10,8 @@
       "type": "string",
       "enum": [
         "grundkurs",
-        "specialist"
+        "specialist",
+        "maskinutbildning"
       ],
       "default": "grundkurs",
       "description": "Vilken kurskategori modulen tillh\u00f6r"

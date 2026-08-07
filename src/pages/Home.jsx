@@ -7,6 +7,7 @@ import NewsSection from "@/components/landing/NewsSection";
 import CourseSection from "@/components/landing/CourseSection";
 import PremiumModulesSection from "@/components/landing/PremiumModulesSection";
 import SpecialistCoursesSection from "@/components/landing/SpecialistCoursesSection";
+import MachineTrainingSection from "@/components/landing/MachineTrainingSection";
 import PedagogySection from "@/components/landing/PedagogySection";
 import AboutSection from "@/components/landing/AboutSection";
 import Footer from "@/components/landing/Footer";
@@ -36,6 +37,7 @@ export default function Home() {
       <CourseSection />
       <PremiumModulesSection />
       <SpecialistCoursesSection />
+      <MachineTrainingSection />
       <PedagogySection />
       <AboutSection />
       <Footer />
