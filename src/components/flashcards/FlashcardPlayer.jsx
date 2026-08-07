@@ -56,6 +56,10 @@ export default function FlashcardPlayer({ moduleId }) {
     } else {
       setReviewIds((prev) => new Set(prev).add(card.id));
       setKnownIds((prev) => { const n = new Set(prev); n.delete(card.id); return n; });
+      // Persist difficulty signal for admin analytics
+      base44.entities.Flashcard.update(card.id, {
+        review_count: (card.review_count || 0) + 1,
+      });
     }
     if (current < flashcards.length - 1) {
       goTo(current + 1);

@@ -9,6 +9,7 @@ import StatsOverview from "@/components/admin/StatsOverview";
 import ModuleRow from "@/components/admin/ModuleRow";
 import ModuleForm from "@/components/admin/ModuleForm";
 import SalesTab from "@/components/admin/SalesTab";
+import StudentProgressTab from "@/components/admin/StudentProgressTab";
 
 export default function Admin() {
   const [showForm, setShowForm] = useState(false);
@@ -94,7 +95,7 @@ export default function Admin() {
 
         {/* Tab navigation */}
         <div className="flex gap-1 border-b border-border/50">
-          {[{ id: "modules", label: "Moduler" }, { id: "sales", label: "Försäljning & Resultat" }].map((tab) => (
+          {[{ id: "modules", label: "Moduler" }, { id: "sales", label: "Försäljning & Resultat" }, { id: "progress", label: "Elevprogress" }].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -110,6 +111,8 @@ export default function Admin() {
         </div>
 
         {activeTab === "sales" && <SalesTab modules={modules} />}
+
+        {activeTab === "progress" && <StudentProgressTab modules={modules} />}
 
         {activeTab === "modules" && (
           <>

@@ -8,15 +8,20 @@
     },
     "question": {
       "type": "string",
-      "description": "Framsida \u2013 fr\u00e5gan (t.ex. 'I vilken lag regleras journalf\u00f6ring?')"
+      "description": "Framsida \u2013 fr\u00e5gan"
     },
     "answer": {
       "type": "string",
-      "description": "Baksida \u2013 svaret (t.ex. 'Patientdatalagen')"
+      "description": "Baksida \u2013 svaret"
     },
     "order": {
       "type": "number",
       "description": "Visningsordning inom kortleken"
+    },
+    "review_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Antal g\u00e5nger kortet markerats som 'beh\u00f6ver \u00f6va' \u2013 anv\u00e4nds f\u00f6r att identifiera sv\u00e5ra kort"
     }
   },
   "required": [
