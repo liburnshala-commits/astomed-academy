@@ -103,14 +103,10 @@ export const AuthProvider = ({ children }) => {
       setIsLoadingAuth(false);
       setIsAuthenticated(false);
       setAuthChecked(true);
-      
-      // If user auth fails, it might be an expired token
-      if (error.status === 401 || error.status === 403) {
-        setAuthError({
-          type: 'auth_required',
-          message: 'Authentication required'
-        });
-      }
+      // For a public app, an expired/invalid token just means the user is a
+      // guest — do NOT trigger a login redirect. The auth_required error is
+      // only meaningful when it comes from the app-level public-settings
+      // check (403), which is handled separately above.
     }
   };
 
