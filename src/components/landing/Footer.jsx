@@ -6,10 +6,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between gap-10">
           <div className="max-w-sm">
-            <div className="flex items-center gap-2.5 mb-4">
-              <img src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/219636062_Astomed_Symbol_white.png" alt="Astomed" className="h-6 w-auto" />
-              <img src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/b90ab705f_Astomed_Wordmark_white.png" alt="Astomed" className="h-4 w-auto" />
-              <span className="text-[10px] font-body font-medium uppercase tracking-[0.18em] text-accent border-l border-white/20 pl-2">Academy</span>
+            <div className="flex items-end gap-0.5 mb-4">
+              <img src="https://media.base44.com/images/public/6a2bb2f0c7148c2a75c598c0/219636062_Astomed_Symbol_white.png" alt="Astomed Academy" className="h-6 w-auto" />
+              <span className="font-heading font-bold text-[20px] leading-[22px] text-white tracking-tight">CADEMY</span>
             </div>
             <p className="text-sm font-body font-light text-white/60 leading-relaxed">
               E-learning för kliniker. Juridik, patientsäkerhet och konsumentskydd – 
