@@ -7,8 +7,8 @@
 @layer base {
   :root {
     /* Astomed Brand Colors */
-    /* Primary background: Cream #FFF8EF */
-    --background: 33 100% 97%;
+    /* Primary background: Cream #FBF7F0 (from astomed.se) */
+    --background: 38 58% 96%;
     --foreground: 0 2% 13%;
 
     --card: 0 0% 100%;
