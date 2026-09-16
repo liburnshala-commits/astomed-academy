@@ -22,7 +22,7 @@ export default async function(req) {
       message: body.message,
     };
 
-    const response = await fetch(`${academyUrl}/functions/ingestAcademyRegistration`, {
+    const response = await fetch(`${academyUrl}/functions/createProspect`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
