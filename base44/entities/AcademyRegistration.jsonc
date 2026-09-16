@@ -1,0 +1,49 @@
+{
+  "name": "AcademyRegistration",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "S\u00f6kandens fullst\u00e4ndiga namn"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "E-postadress"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefonnummer"
+    },
+    "clinic": {
+      "type": "string",
+      "description": "Klinik/f\u00f6retag"
+    },
+    "course_interest": {
+      "type": "string",
+      "description": "Vilken kurs man \u00e4r intresserad av"
+    },
+    "message": {
+      "type": "string",
+      "description": "Frivilligt meddelande"
+    },
+    "forwarded": {
+      "type": "boolean",
+      "default": false,
+      "description": "Huruvida datan vidarebefordrats till academy-appen"
+    },
+    "forwarded_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Tidpunkt f\u00f6r vidarebefordran"
+    },
+    "forward_error": {
+      "type": "string",
+      "description": "Felmeddelande om vidarebefordran misslyckades"
+    }
+  },
+  "required": [
+    "full_name",
+    "email"
+  ]
+}
