@@ -4,7 +4,7 @@
   "properties": {
     "full_name": {
       "type": "string",
-      "description": "S\u00f6kandens fullst\u00e4ndiga namn"
+      "description": "Kontaktpersonens fullst\u00e4ndiga namn"
     },
     "email": {
       "type": "string",
@@ -19,6 +19,18 @@
       "type": "string",
       "description": "Klinik/f\u00f6retag"
     },
+    "address": {
+      "type": "string",
+      "description": "Klinikens adress"
+    },
+    "city": {
+      "type": "string",
+      "description": "Ort"
+    },
+    "equipment_type": {
+      "type": "string",
+      "description": "Vilken utrustningstyp kunden har (t.ex. laser, IPL, RF)"
+    },
     "course_interest": {
       "type": "string",
       "description": "Vilken kurs man \u00e4r intresserad av"
@@ -30,7 +42,7 @@
     "forwarded": {
       "type": "boolean",
       "default": false,
-      "description": "Huruvida datan vidarebefordrats till academy-appen"
+      "description": "Huruvida datan vidarebefordrats till serviceastomed"
     },
     "forwarded_at": {
       "type": "string",

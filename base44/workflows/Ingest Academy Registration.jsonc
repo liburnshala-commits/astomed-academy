@@ -10,7 +10,7 @@
       "entity_name": "AcademyRegistration"
     }
   },
-  "description": "Vidarebefordrar nya academy-registreringar till academy-appen via ingestAcademyRegistration",
+  "description": "Vidarebefordrar nya klinikanm\u00e4lningar till serviceastomed via ingestAcademyRegistration",
   "definition": {
     "document": {
       "dsl": "1.0.0",
@@ -30,14 +30,16 @@
               "email": "${ .trigger.data.email }",
               "phone": "${ .trigger.data.phone }",
               "clinic": "${ .trigger.data.clinic }",
-              "course_interest": "${ .trigger.data.course_interest }",
+              "address": "${ .trigger.data.address }",
+              "city": "${ .trigger.data.city }",
+              "equipment_type": "${ .trigger.data.equipment_type }",
               "message": "${ .trigger.data.message }"
             }
           },
           "then": "end",
           "x-base44": {
-            "title": "Vidarebefordra registrering",
-            "description": "Skickar data till academy-appen"
+            "title": "Vidarebefordra anm\u00e4lan",
+            "description": "Skickar data till serviceastomed"
           }
         }
       }
