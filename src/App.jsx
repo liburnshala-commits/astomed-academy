@@ -17,6 +17,7 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import AcademyRegistration from './pages/AcademyRegistration';
+import RequestAccess from './pages/RequestAccess';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -55,6 +56,7 @@ const AuthenticatedApp = () => {
       <Route path="/mina-certifikat" element={<MyCertificates />} />
       <Route path="/compliance" element={<ComplianceDashboard />} />
       <Route path="/academy-registrering" element={<AcademyRegistration />} />
+      <Route path="/ansok" element={<RequestAccess />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
