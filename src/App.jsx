@@ -1,11 +1,13 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import AdminRoute from '@/components/AdminRoute';
 import Home from './pages/Home';
 import ModuleDetail from './pages/ModuleDetail';
 import Admin from './pages/Admin';
@@ -51,12 +53,20 @@ const AuthenticatedApp = () => {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/" element={<Home />} />
       <Route path="/modul/:id" element={<ModuleDetail />} />
-      <Route path="/admin" element={<Admin />} />
-      <Route path="/admin/quiz" element={<AdminQuiz />} />
-      <Route path="/mina-certifikat" element={<MyCertificates />} />
-      <Route path="/compliance" element={<ComplianceDashboard />} />
-      <Route path="/academy-registrering" element={<AcademyRegistration />} />
       <Route path="/ansok" element={<RequestAccess />} />
+
+      {/* Authenticated routes */}
+      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+        <Route path="/mina-certifikat" element={<MyCertificates />} />
+        <Route path="/compliance" element={<ComplianceDashboard />} />
+      </Route>
+
+      {/* Admin-only routes */}
+      <Route element={<AdminRoute />}>
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/quiz" element={<AdminQuiz />} />
+        <Route path="/academy-registrering" element={<AcademyRegistration />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
