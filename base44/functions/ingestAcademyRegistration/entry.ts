@@ -13,18 +13,22 @@ export default async function(req) {
       return Response.json({ error: "SERVICE_APP_URL eller SERVICE_API_KEY saknas" }, { status: 500 });
     }
 
+    const notesParts = [];
+    if (body.address) notesParts.push(`Adress: ${body.address}`);
+    if (body.city) notesParts.push(`Ort: ${body.city}`);
+    if (body.equipment_type) notesParts.push(`Utrustning: ${body.equipment_type}`);
+    if (body.message) notesParts.push(body.message);
+
     const payload = {
-      full_name: body.full_name,
+      company_name: body.clinic,
+      contact_person: body.full_name,
       email: body.email,
       phone: body.phone,
-      clinic: body.clinic,
-      address: body.address,
-      city: body.city,
-      equipment_type: body.equipment_type,
-      message: body.message,
+      org_number: body.org_number,
+      notes: notesParts.join("\n"),
     };
 
-    const response = await fetch(`${serviceUrl}/functions/createProspect`, {
+    const response = await fetch(`${serviceUrl}/functions/createAcademyLead`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

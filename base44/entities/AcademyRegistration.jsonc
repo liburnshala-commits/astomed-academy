@@ -19,6 +19,10 @@
       "type": "string",
       "description": "Klinik/f\u00f6retag"
     },
+    "org_number": {
+      "type": "string",
+      "description": "Organisationsnummer"
+    },
     "address": {
       "type": "string",
       "description": "Klinikens adress"

@@ -30,6 +30,7 @@
               "email": "${ .trigger.data.email }",
               "phone": "${ .trigger.data.phone }",
               "clinic": "${ .trigger.data.clinic }",
+              "org_number": "${ .trigger.data.org_number }",
               "address": "${ .trigger.data.address }",
               "city": "${ .trigger.data.city }",
               "equipment_type": "${ .trigger.data.equipment_type }",
