@@ -1,0 +1,46 @@
+{
+  "name": "Ingest Academy Registration",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "AcademyRegistration"
+    }
+  },
+  "description": "Vidarebefordrar nya academy-registreringar till academy-appen via ingestAcademyRegistration",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "ingest_academy_registration",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "forward_registration": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "ingestAcademyRegistration",
+            "args": {
+              "registration_id": "${ .trigger.entity_id }",
+              "full_name": "${ .trigger.data.full_name }",
+              "email": "${ .trigger.data.email }",
+              "phone": "${ .trigger.data.phone }",
+              "clinic": "${ .trigger.data.clinic }",
+              "course_interest": "${ .trigger.data.course_interest }",
+              "message": "${ .trigger.data.message }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Vidarebefordra registrering",
+            "description": "Skickar data till academy-appen"
+          }
+        }
+      }
+    ]
+  }
+}
