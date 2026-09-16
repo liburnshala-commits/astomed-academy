@@ -91,6 +91,7 @@ export default function Navbar() {
             <a href={navHref("#premiummoduler")} className="text-sm font-body font-medium text-white/80 hover:text-white transition-colors">Premiummoduler</a>
             <a href={navHref("#specialistkurser")} className="text-sm font-body font-medium text-white/80 hover:text-white transition-colors">Specialistkurser</a>
             <a href={navHref("#om-oss")} className="text-sm font-body font-medium text-white/80 hover:text-white transition-colors">Om oss</a>
+            <a href={navHref("#ansok")} className="text-sm font-body font-medium text-white/80 hover:text-white transition-colors">Ansök</a>
             <a href={navHref("#kontakt")} className="text-sm font-body font-medium text-white/80 hover:text-white transition-colors">Kontakt</a>
           </div>
         )}
@@ -178,6 +179,7 @@ export default function Navbar() {
           <a href={navHref("#premiummoduler")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-white/80">Premiummoduler</a>
           <a href={navHref("#specialistkurser")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-white/80">Specialistkurser</a>
           <a href={navHref("#om-oss")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-white/80">Om oss</a>
+          <a href={navHref("#ansok")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-white/80">Ansök</a>
           <a href={navHref("#kontakt")} onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-white/80">Kontakt</a>
           <hr className="border-white/10" />
           {isAuthenticated ? (
