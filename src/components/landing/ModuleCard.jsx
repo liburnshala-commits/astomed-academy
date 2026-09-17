@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Clock, FileText, ArrowRight } from "lucide-react";
+import { Clock, FileText, ArrowRight, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 
@@ -14,6 +14,11 @@ export default function ModuleCard({ module, index }) {
   };
 
   const isAvailable = module.status === "published";
+  // Modules 1–4 (grundkurs) are gated — visually shown but locked until access is granted
+  const isGated =
+    (module.category || "grundkurs") === "grundkurs" &&
+    module.module_number >= 1 &&
+    module.module_number <= 4;
 
   return (
     <motion.div
@@ -22,8 +27,15 @@ export default function ModuleCard({ module, index }) {
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
     >
-      <Link to={`/modul/${module.id}`} className="group block">
-        <div className="relative bg-card border border-border/50 p-6 md:p-8 hover:border-accent/40 hover:shadow-md transition-all duration-200" style={{borderRadius: "4px"}}>
+      <Link
+        to={isGated ? "#" : `/modul/${module.id}`}
+        onClick={isGated ? (e) => e.preventDefault() : undefined}
+        className={`group block ${isGated ? "cursor-not-allowed" : ""}`}
+      >
+        <div
+          className={`relative bg-card border border-border/50 p-6 md:p-8 transition-all duration-200 ${isGated ? "opacity-70" : "hover:border-accent/40 hover:shadow-md"}`}
+          style={{ borderRadius: "4px" }}
+        >
           {/* Module number */}
           <div className="absolute top-6 right-8 md:top-8">
             <span className="font-heading text-5xl font-bold text-muted/60 select-none tabular-nums">
@@ -32,11 +44,11 @@ export default function ModuleCard({ module, index }) {
           </div>
 
           <div className="relative">
-            <span className={`inline-block text-[10px] font-body font-semibold uppercase tracking-widest px-2.5 py-1 rounded-sm ${isAvailable ? "bg-accent text-white" : "bg-muted text-muted-foreground"}`}>
-              {statusLabels[module.status] || "Under utveckling"}
+            <span className={`inline-block text-[10px] font-body font-semibold uppercase tracking-widest px-2.5 py-1 rounded-sm ${isGated ? "bg-muted text-muted-foreground" : isAvailable ? "bg-accent text-white" : "bg-muted text-muted-foreground"}`}>
+              {isGated ? "Åtkomst krävs" : statusLabels[module.status] || "Under utveckling"}
             </span>
 
-            <h3 className="mt-4 font-heading text-lg md:text-xl font-semibold text-foreground leading-snug pr-16 group-hover:text-accent transition-colors duration-200">
+            <h3 className="mt-4 font-heading text-lg md:text-xl font-semibold text-foreground leading-snug pr-16">
               {module.title}
             </h3>
 
@@ -63,9 +75,16 @@ export default function ModuleCard({ module, index }) {
               )}
             </div>
 
-            <div className="mt-4 flex items-center gap-1.5 text-xs font-body font-semibold uppercase tracking-wider text-accent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              Läs mer <ArrowRight className="w-3 h-3" />
-            </div>
+            {isGated ? (
+              <div className="mt-4 flex items-center gap-1.5 text-xs font-body font-semibold uppercase tracking-wider text-muted-foreground">
+                <Lock className="w-3.5 h-3.5" />
+                Tillgång beviljas vid godkänd ansökan
+              </div>
+            ) : (
+              <div className="mt-4 flex items-center gap-1.5 text-xs font-body font-semibold uppercase tracking-wider text-accent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                Läs mer <ArrowRight className="w-3 h-3" />
+              </div>
+            )}
           </div>
         </div>
       </Link>

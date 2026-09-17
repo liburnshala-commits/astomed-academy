@@ -119,7 +119,11 @@ export default function ModuleDetail() {
 
   const isPublished = module.status === "published";
   const isFree = !module.price;
-  const hasAccess = !!purchase || isFree;
+  const isGated =
+    (module.category || "grundkurs") === "grundkurs" &&
+    module.module_number >= 1 &&
+    module.module_number <= 4;
+  const hasAccess = (!!purchase || isFree) && !isGated;
   const isCompletedAndLocked = hasAccess && !!certificate;
   const nextModule = allModules.find(
     (m) =>
@@ -184,7 +188,24 @@ export default function ModuleDetail() {
             </div>
           )}
 
-          {isPublished && (
+          {isPublished && isGated && (
+            <div className="mt-8 bg-muted/50 rounded-2xl border border-border/50 p-8 text-center">
+              <Lock className="w-8 h-8 text-muted-foreground/50 mx-auto mb-3" />
+              <h3 className="font-heading text-lg font-semibold text-foreground">Åtkomst krävs</h3>
+              <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
+                Denna modul är endast tillgänglig för kliniker som beviljats åtkomst av Astomed.
+                Ansök via formuläret på startsidan så återkommer vi med inloggningsuppgifter.
+              </p>
+              <Link to="/#ansok" className="mt-5 inline-block">
+                <Button className="bg-accent text-accent-foreground hover:bg-accent/90 gap-2">
+                  Ansök om åtkomst
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+          )}
+
+          {isPublished && !isGated && (
             <>
               {/* Purchased or free: video → quiz → next module */}
               {hasAccess && (
