@@ -43,6 +43,8 @@ export default function Home() {
       <AboutSection />
       <RequestAccessSection />
       <Footer />
+      {/* Spacer for mobile sticky apply button */}
+      <div className="h-24 lg:hidden" />
     </div>
   );
 }
