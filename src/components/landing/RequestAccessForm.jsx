@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { base44 } from "@/api/base44Client";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import PrivacyPolicyModal from "@/components/landing/PrivacyPolicyModal";
 import {
   Select,
   SelectContent,
@@ -25,6 +27,8 @@ export default function RequestAccessForm({ compact = false }) {
     responsibility_role: "",
     message: ""
   });
+  const [policyAccepted, setPolicyAccepted] = useState(false);
+  const [showPolicy, setShowPolicy] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { toast } = useToast();
@@ -188,7 +192,32 @@ export default function RequestAccessForm({ compact = false }) {
         />
       </div>
 
-      <Button type="submit" className="w-full" disabled={submitting}>
+      <div className="space-y-2">
+        <div className="flex items-start gap-2.5">
+          <Checkbox
+            id={`policy-${compact ? "compact" : "full"}`}
+            checked={policyAccepted}
+            onCheckedChange={(checked) => setPolicyAccepted(checked === true)}
+            className="mt-0.5"
+          />
+          <Label htmlFor={`policy-${compact ? "compact" : "full"}`} className="text-xs font-body text-muted-foreground leading-relaxed cursor-pointer">
+            Jag har läst och godkänner{" "}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowPolicy(true);
+              }}
+              className="text-accent underline underline-offset-2 hover:text-accent/80 font-medium"
+            >
+              integritetspolicyn
+            </button>
+            .
+          </Label>
+        </div>
+      </div>
+
+      <Button type="submit" className="w-full" disabled={submitting || !policyAccepted}>
         {submitting ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -198,6 +227,14 @@ export default function RequestAccessForm({ compact = false }) {
           "Ansök om åtkomst"
         )}
       </Button>
+
+      {!policyAccepted && (
+        <p className="text-xs text-muted-foreground text-center">
+          Godkänn integritetspolicyn för att skicka ansökan.
+        </p>
+      )}
+
+      {showPolicy && <PrivacyPolicyModal onClose={() => setShowPolicy(false)} />}
     </form>
   );
 }
