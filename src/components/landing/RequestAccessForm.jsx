@@ -6,6 +6,13 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { base44 } from "@/api/base44Client";
 import { Loader2, CheckCircle2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function RequestAccessForm({ compact = false }) {
   const [formData, setFormData] = useState({
@@ -15,6 +22,7 @@ export default function RequestAccessForm({ compact = false }) {
     phone: "",
     org_number: "",
     equipment_type: "",
+    responsibility_role: "",
     message: ""
   });
   const [submitting, setSubmitting] = useState(false);
@@ -23,6 +31,10 @@ export default function RequestAccessForm({ compact = false }) {
 
   const handleChange = (field) => (e) => {
     setFormData({ ...formData, [field]: e.target.value });
+  };
+
+  const handleSelectChange = (field) => (value) => {
+    setFormData({ ...formData, [field]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -65,7 +77,7 @@ export default function RequestAccessForm({ compact = false }) {
           className="mt-6"
           onClick={() => {
             setSubmitted(false);
-            setFormData({ clinic: "", full_name: "", email: "", phone: "", org_number: "", equipment_type: "", message: "" });
+            setFormData({ clinic: "", full_name: "", email: "", phone: "", org_number: "", equipment_type: "", responsibility_role: "", message: "" });
           }}
         >
           Skicka en till ansökan
@@ -143,6 +155,26 @@ export default function RequestAccessForm({ compact = false }) {
             placeholder="Laser, IPL, RF..."
           />
         </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="responsibility_role" className="text-sm font-medium">Ansvarsroll *</Label>
+        <Select
+          value={formData.responsibility_role}
+          onValueChange={handleSelectChange("responsibility_role")}
+          required
+        >
+          <SelectTrigger id="responsibility_role" className="w-full">
+            <SelectValue placeholder="Välj din ansvarsroll idag" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="verksamhetsutovare">Verksamhetsutövare</SelectItem>
+            <SelectItem value="medicinskt_ansvarig_lakare">Medicinskt ansvarig läkare</SelectItem>
+            <SelectItem value="behandlare">Behandlare</SelectItem>
+            <SelectItem value="teknisk_ansvarig">Teknisk ansvarig</SelectItem>
+            <SelectItem value="allman_personal">Allmän personal</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-1.5">

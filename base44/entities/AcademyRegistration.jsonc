@@ -35,6 +35,17 @@
       "type": "string",
       "description": "Vilken utrustningstyp kunden har (t.ex. laser, IPL, RF)"
     },
+    "responsibility_role": {
+      "type": "string",
+      "enum": [
+        "verksamhetsutovare",
+        "medicinskt_ansvarig_lakare",
+        "behandlare",
+        "teknisk_ansvarig",
+        "allman_personal"
+      ],
+      "description": "Vilken ansvarsroll personen har idag i verksamheten"
+    },
     "course_interest": {
       "type": "string",
       "description": "Vilken kurs man \u00e4r intresserad av"
