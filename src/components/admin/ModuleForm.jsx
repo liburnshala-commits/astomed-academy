@@ -19,7 +19,28 @@ export default function ModuleForm({ open, onClose, onSave, module, courseId }) 
     script_status: "not_started",
     recording_status: "not_started",
     pdf_status: "not_started",
+    target_roles: [],
   });
+
+  const roleOptions = [
+    { value: "verksamhetsutovare", label: "Verksamhetsutövare" },
+    { value: "medicinskt_ansvarig_lakare", label: "Medicinskt ansvarig läkare" },
+    { value: "behandlare", label: "Behandlare" },
+    { value: "teknisk_ansvarig", label: "Teknisk ansvarig" },
+    { value: "allman_personal", label: "Allmän personal" },
+  ];
+
+  const toggleRole = (role) => {
+    setForm((prev) => {
+      const current = prev.target_roles || [];
+      return {
+        ...prev,
+        target_roles: current.includes(role)
+          ? current.filter((r) => r !== role)
+          : [...current, role],
+      };
+    });
+  };
 
   const handleChange = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -98,6 +119,29 @@ export default function ModuleForm({ open, onClose, onSave, module, courseId }) 
           <div className="space-y-1.5">
             <Label className="text-xs">PDF-URL</Label>
             <Input value={form.pdf_url || ""} onChange={(e) => handleChange("pdf_url", e.target.value)} placeholder="https://..." />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-xs">Målroller — visas i menyens lärstigar</Label>
+            <div className="grid grid-cols-1 gap-2">
+              {roleOptions.map((role) => {
+                const checked = (form.target_roles || []).includes(role.value);
+                return (
+                  <label
+                    key={role.value}
+                    className="flex items-center gap-2.5 text-sm cursor-pointer rounded-md border border-border/60 px-3 py-2 hover:bg-muted/40"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleRole(role.value)}
+                      className="w-4 h-4 accent-accent"
+                    />
+                    <span className="font-body">{role.label}</span>
+                  </label>
+                );
+              })}
+            </div>
           </div>
 
           <DialogFooter>

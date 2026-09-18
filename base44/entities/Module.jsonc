@@ -16,6 +16,21 @@
       "default": "grundkurs",
       "description": "Vilken kurskategori modulen tillh\u00f6r"
     },
+    "target_roles": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "verksamhetsutovare",
+          "medicinskt_ansvarig_lakare",
+          "behandlare",
+          "teknisk_ansvarig",
+          "allman_personal"
+        ]
+      },
+      "default": [],
+      "description": "Vilka ansvarsroller modulen visas f\u00f6r i menyens l\u00e4rstigar"
+    },
     "title": {
       "type": "string",
       "description": "Module title"
