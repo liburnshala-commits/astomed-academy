@@ -158,6 +158,7 @@ export default function Admin() {
                     <TableRow className="bg-muted/30">
                       <TableHead className="font-semibold">Modul</TableHead>
                       <TableHead className="font-semibold">Status</TableHead>
+                      <TableHead className="font-semibold">Roller</TableHead>
                       <TableHead className="font-semibold">Manus</TableHead>
                       <TableHead className="font-semibold">Inspelning</TableHead>
                       <TableHead className="font-semibold">PDF</TableHead>
@@ -168,11 +169,11 @@ export default function Admin() {
                   <TableBody>
                     {isLoading ? (
                       <TableRow>
-                        <td colSpan={7} className="py-12 text-center text-muted-foreground">Laddar...</td>
+                        <td colSpan={8} className="py-12 text-center text-muted-foreground">Laddar...</td>
                       </TableRow>
                     ) : modules.length === 0 ? (
                       <TableRow>
-                        <td colSpan={7} className="py-12 text-center text-muted-foreground">
+                        <td colSpan={8} className="py-12 text-center text-muted-foreground">
                           Inga moduler ännu. Klicka "Ny modul" för att börja.
                         </td>
                       </TableRow>

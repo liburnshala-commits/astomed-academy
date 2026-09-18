@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Pencil, Trash2 } from "lucide-react";
 import ModuleStatusBadge from "./ModuleStatusBadge";
+import RoleAccessCell from "./RoleAccessCell";
 
 export default function ModuleRow({ module, onEdit, onDelete, onStatusChange }) {
   return (
@@ -14,6 +15,9 @@ export default function ModuleRow({ module, onEdit, onDelete, onStatusChange }) 
       </TableCell>
       <TableCell>
         <ModuleStatusBadge status={module.status} />
+      </TableCell>
+      <TableCell>
+        <RoleAccessCell module={module} onChange={onStatusChange} />
       </TableCell>
       <TableCell>
         <Select
